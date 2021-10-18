@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"rc.justin.ooo/config"
 	"rc.justin.ooo/models"
 )
 
@@ -13,8 +12,22 @@ type UserController struct{}
 func (u UserController) Setup(router *gin.Engine) {
 	userGroup := router.Group("user")
 	{
+		userGroup.GET("/:id", u.Retrieve)
 		userGroup.POST("/create", u.Create)
 	}
+}
+
+func (u UserController) Retrieve(c *gin.Context) {
+	id := c.Param("id")
+	user, err := models.UserFromID(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": user})
 }
 
 func (u UserController) Create(c *gin.Context) {
@@ -23,16 +36,18 @@ func (u UserController) Create(c *gin.Context) {
 	ucf := &models.UserCreateForm{}
 	err := c.BindJSON(&ucf)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"successs": false,
+			"error":    err.Error(),
+		})
 		return
 	}
 
 	// create db user from form
-	user := new(models.User)
-	dbuser := user.FromUCF(ucf)
+	user := models.UserFromUCF(ucf)
 
 	// create object in database
-	config.DB.Create(dbuser)
+	models.CreateNewUser(user)
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 	})

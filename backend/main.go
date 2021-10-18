@@ -5,14 +5,16 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"rc.justin.ooo/config"
 	"rc.justin.ooo/controllers"
+	"rc.justin.ooo/db"
+	"rc.justin.ooo/models"
 )
 
 func main() {
 
 	// initialize database connection
-	config.InitDatabase()
+	db.InitDatabase()
+	db.DB.AutoMigrate(&models.User{})
 
 	// configure gin router with cors middleware
 	router := gin.Default()

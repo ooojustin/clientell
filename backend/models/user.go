@@ -3,6 +3,8 @@ package models
 import (
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+
+	"rc.justin.ooo/db"
 )
 
 type User struct {
@@ -20,7 +22,24 @@ type UserCreateForm struct {
 	Password  string `json:"password"`
 }
 
-func (u User) FromUCF(ucf *UserCreateForm) *User {
+func CreateNewUser(user *User) error {
+	err := db.DB.Create(user).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func UserFromID(id string) (*User, error) {
+	var user User
+	err := db.DB.Table("users").Where("id = ?", id).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+func UserFromUCF(ucf *UserCreateForm) *User {
 
 	// hash password user bcrypt
 	bpassword := []byte(ucf.Password)
