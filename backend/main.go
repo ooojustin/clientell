@@ -6,6 +6,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"rc.justin.ooo/config"
+	"rc.justin.ooo/controllers"
 )
 
 func main() {
@@ -17,9 +18,14 @@ func main() {
 	router := gin.Default()
 	router.Use(cors.Default())
 
+	// index path
 	router.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "rc.justin.ooo")
 	})
+
+	// setup user routes
+	user := new(controllers.UserController)
+	user.Setup(router)
 
 	router.Run()
 
