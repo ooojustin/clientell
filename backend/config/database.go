@@ -3,6 +3,7 @@ package config
 import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"rc.justin.ooo/models"
 )
 
 var DB *gorm.DB
@@ -18,6 +19,6 @@ func InitDatabase() {
 	}
 
 	// run model migrations
-	// TODO
+	DB.AutoMigrate(&models.User{})
 
 }
