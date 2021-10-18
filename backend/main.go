@@ -1,13 +1,26 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+	"rc.justin.ooo/config"
+)
 
 func main() {
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
+
+	// initialize database connection
+	config.InitDatabase()
+
+	// configure gin router with cors middleware
+	router := gin.Default()
+	router.Use(cors.Default())
+
+	router.GET("/", func(c *gin.Context) {
+		c.String(http.StatusOK, "rc.justin.ooo")
 	})
-	r.Run()
+
+	router.Run()
+
 }
