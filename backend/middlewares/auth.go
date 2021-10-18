@@ -16,10 +16,9 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		_, err := models.UserFromToken(token)
+		user, err := models.UserFromToken(token)
 		if err == nil {
-			//data, _ := json.Marshal(user)
-			//fmt.Println(string(data))
+			c.Set("user", user)
 			c.Next()
 			return
 		}

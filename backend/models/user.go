@@ -24,6 +24,11 @@ type UserCreateForm struct {
 	Password  string `json:"password"`
 }
 
+type UserLoginForm struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 func CreateNewUser(user *User) error {
 	err := db.DB.Create(user).Error
 	if err != nil {
@@ -32,22 +37,25 @@ func CreateNewUser(user *User) error {
 	return nil
 }
 
-func UserFromID(id string) (*User, error) {
+func UserFrom(field string, value string) (*User, error) {
 	var user User
-	err := db.DB.Table("users").Where("id = ?", id).First(&user).Error
+	err := db.DB.Table("users").Where(field+" = ?", value).First(&user).Error
 	if err != nil {
 		return nil, err
 	}
 	return &user, nil
 }
 
+func UserFromID(id string) (*User, error) {
+	return UserFrom("id", id)
+}
+
 func UserFromToken(token string) (*User, error) {
-	var user User
-	err := db.DB.Table("users").Where("token = ?", token).First(&user).Error
-	if err != nil {
-		return nil, err
-	}
-	return &user, nil
+	return UserFrom("token", token)
+}
+
+func UserFromEmail(email string) (*User, error) {
+	return UserFrom("email", email)
 }
 
 func UserFromUCF(ucf *UserCreateForm) *User {

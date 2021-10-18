@@ -36,6 +36,7 @@ func UnauthorizedRoutes() {
 	})
 
 	user := new(controllers.UserController)
+	router.POST("/login", user.Login)
 	router.POST("/create_account", user.Create)
 
 }
