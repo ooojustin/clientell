@@ -50,6 +50,7 @@ func (u UserController) Create(c *gin.Context) {
 	models.CreateNewUser(user)
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
+		"data":    user,
 	})
 
 }

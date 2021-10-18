@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"rc.justin.ooo/controllers"
 	"rc.justin.ooo/db"
+	"rc.justin.ooo/middlewares"
 	"rc.justin.ooo/models"
 )
 
@@ -24,6 +25,9 @@ func main() {
 	router.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "rc.justin.ooo")
 	})
+
+	// enable authentication middleware
+	router.Use(middlewares.AuthMiddleware())
 
 	// setup user routes
 	user := new(controllers.UserController)
