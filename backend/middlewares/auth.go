@@ -1,8 +1,6 @@
 package middlewares
 
 import (
-	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -18,10 +16,10 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		user, err := models.UserFromToken(token)
+		_, err := models.UserFromToken(token)
 		if err == nil {
-			data, _ := json.Marshal(user)
-			fmt.Println(string(data))
+			//data, _ := json.Marshal(user)
+			//fmt.Println(string(data))
 			c.Next()
 			return
 		}

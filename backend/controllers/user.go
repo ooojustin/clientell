@@ -9,14 +9,6 @@ import (
 
 type UserController struct{}
 
-func (u UserController) Setup(router *gin.Engine) {
-	userGroup := router.Group("user")
-	{
-		userGroup.GET("/:id", u.Retrieve)
-		userGroup.POST("/create", u.Create)
-	}
-}
-
 func (u UserController) Retrieve(c *gin.Context) {
 	id := c.Param("id")
 	user, err := models.UserFromID(id)

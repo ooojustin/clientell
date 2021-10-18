@@ -11,28 +11,50 @@ import (
 	"rc.justin.ooo/models"
 )
 
-func main() {
+var router *gin.Engine
 
-	// initialize database connection
+func SetupDatabase() {
+	// initialize database connection and migrate models
 	db.InitDatabase()
 	db.DB.AutoMigrate(&models.User{})
+}
 
-	// configure gin router with cors middleware
-	router := gin.Default()
+func SetupRouter() {
+	// initialize router, routes, and middlewares
+	router = gin.Default()
 	router.Use(cors.Default())
+	UnauthorizedRoutes()
+	router.Use(middlewares.AuthMiddleware())
+	AuthorizedRoutes()
+}
 
-	// index path
+func UnauthorizedRoutes() {
+	// initialize requests that don't require a token
+
 	router.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "rc.justin.ooo")
 	})
 
-	// enable authentication middleware
-	router.Use(middlewares.AuthMiddleware())
-
-	// setup user routes
 	user := new(controllers.UserController)
-	user.Setup(router)
+	router.POST("/create_account", user.Create)
 
+}
+
+func AuthorizedRoutes() {
+	// initialize requests that require a token
+
+	user := new(controllers.UserController)
+	router.GET("/user/:id", user.Retrieve)
+
+}
+
+func main() {
+
+	// setup database & router
+	SetupDatabase()
+	SetupRouter()
+
+	// run router
 	router.Run()
 
 }
