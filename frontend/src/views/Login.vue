@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { Http } from '@capacitor-community/http';
+import { Http } from "@capacitor-community/http";
 import vars from "../variables.ts";
 
 import { 
@@ -76,7 +76,7 @@ export default {
                     color: "success"
                 });
                 toast.present();
-                console.log("got token", token);
+                this.$store.dispatch("setToken", { token });
             } else {
                 const toast = await toastController.create({
                     message: "Failed to login with those credentials.",

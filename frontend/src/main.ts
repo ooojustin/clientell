@@ -26,9 +26,14 @@ import './theme/variables.css';
 /* Tailwind styles */
 import './theme/tailwind.css';
 
+// vuex store
+import { store } from './store';
+
 const app = createApp(App)
   .use(IonicVue)
-  .use(router);
+  .use(router)
+  .use(store);
+
   
 router.isReady().then(() => {
   app.mount('#app');
