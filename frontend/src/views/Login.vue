@@ -8,37 +8,41 @@
         </ion-header>
         
         <ion-content :fullscreen="true">
-
-            <ion-card>
-                <ion-card-header>
-                    <ion-card-title>Login</ion-card-title>
-                </ion-card-header>
-                <ion-card-content>
-                    <ion-item>
-                        <ion-label position="floating">Email Address</ion-label>
-                        <ion-input type="email" autocomplete="email" v-model="email" />
-                    </ion-item>
-                    <ion-item style="margin-top: 10px; margin-bottom: 10px;">
-                        <ion-label position="floating">Password</ion-label>
-                        <ion-input type="password" autocomplete="current-password" v-model="password" />
-                    </ion-item>
-                    <ion-button expand="block" color="primary" @click="printCreds">Submit</ion-button>
-                </ion-card-content>
-            </ion-card>
-
+            <div class="h-full flex items-center">
+                <ion-card class="w-full" style="margin-bottom: 10rem;">
+                    <ion-card-header>
+                        <ion-card-title>Login</ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                        <ion-item>
+                            <ion-label position="floating">Email Address</ion-label>
+                            <ion-input type="email" autocomplete="email" v-model="email" />
+                        </ion-item>
+                        <ion-item style="margin-top: 10px; margin-bottom: 10px;">
+                            <ion-label position="floating">Password</ion-label>
+                            <ion-input type="password" autocomplete="current-password" v-model="password" />
+                        </ion-item>
+                        <ion-button expand="block" color="primary" @click="printCreds">Submit</ion-button>
+                    </ion-card-content>
+                </ion-card>
+            </div>
         </ion-content>
 
   </ion-page>
 </template>
 
 <script>
+import { Http } from '@capacitor-community/http';
+import vars from "../variables.ts";
+
 import { 
     IonPage, IonHeader, IonToolbar,
     IonTitle, IonContent, IonInput,
     IonLabel, IonItem, IonCard,
     IonCardHeader, IonCardContent, IonCardTitle,
-    IonButton
+    IonButton, toastController
 } from '@ionic/vue';
+
 
 export default {
     name: 'Login',
@@ -56,8 +60,32 @@ export default {
         };
     },
     methods: {
-        printCreds() {
-            console.log(this.email, this.password);
+        async printCreds() {
+            const { email, password } = this;
+            const response = await Http.post({
+                url: `${vars.backend}/login`,
+                data: { email, password }
+            }); 
+            const { data, status } = response;
+            if (status == 200) {
+                const { token } = data.data;
+                const toast = await toastController.create({
+                    message: "Logged in successfully.",
+                    duration: 3000,
+                    position: "top",
+                    color: "success"
+                });
+                toast.present();
+                console.log("got token", token);
+            } else {
+                const toast = await toastController.create({
+                    message: "Failed to login with those credentials.",
+                    duration: 3000,
+                    position: "top",
+                    color: "danger"
+                });
+                toast.present();
+            }
         }
     }
 }
