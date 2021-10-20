@@ -14,15 +14,16 @@
                         <ion-card-title>Login</ion-card-title>
                     </ion-card-header>
                     <ion-card-content>
-                        <ion-item>
+                        <ion-item class="mb-2">
                             <ion-label position="floating">Email Address</ion-label>
                             <ion-input type="email" autocomplete="email" v-model="email" />
                         </ion-item>
-                        <ion-item style="margin-top: 10px; margin-bottom: 10px;">
+                        <ion-item class="mb-4">
                             <ion-label position="floating">Password</ion-label>
                             <ion-input type="password" autocomplete="current-password" v-model="password" />
                         </ion-item>
-                        <ion-button expand="block" color="primary" @click="printCreds">Submit</ion-button>
+                        <ion-button expand="block" color="primary" class="mb-2" @click="doLogin">Submit</ion-button>
+                        <ion-button expand="block" color="medium" router-link="/create_account">Create Account</ion-button>
                     </ion-card-content>
                 </ion-card>
             </div>
@@ -73,7 +74,7 @@ export default {
         this.$store.dispatch("restoreLogin");
     },
     methods: {
-        async printCreds() {
+        async doLogin() {
 
             const { email, password } = this;
             const response = await Http.post({
@@ -106,7 +107,6 @@ export default {
                 toast.present();
 
             }
-
         }
     }
 }
