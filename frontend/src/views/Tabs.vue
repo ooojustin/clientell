@@ -5,7 +5,7 @@
             <ion-tab-bar slot="bottom">
             
                 <ion-tab-button tab="home" href="/tabs/home">
-                    <ion-icon :icon="home" />
+                    <ion-icon :icon="homeSharp" />
                     <ion-label>Home</ion-label>
                 </ion-tab-button>
               
@@ -26,13 +26,13 @@
 
 <script lang="ts">
 import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet } from '@ionic/vue';
-import { ellipse, square, home } from 'ionicons/icons';
+import { ellipse, square, homeSharp } from 'ionicons/icons';
 
 export default {
     name: 'Tabs',
     components: { IonLabel, IonTabs, IonTabBar, IonTabButton, IonIcon, IonPage, IonRouterOutlet },
     setup() {
-        return { ellipse, square, home };
+        return { ellipse, square, homeSharp };
     }
 }
 </script>

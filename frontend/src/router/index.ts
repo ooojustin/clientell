@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
+import AuthTabs from '../views/AuthTabs.vue';
 import Login from '../views/Login.vue';
 import CreateAccount from '../views/CreateAccount.vue';
 import store from '../store/index';
@@ -7,15 +8,21 @@ import store from '../store/index';
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
-        redirect: '/login'
+        redirect: '/auth/login'
     },
     {
-        path: '/login',
-        component: Login
-    },
-    {
-        path: '/create_account',
-        component: CreateAccount
+        path: '/auth/',
+        component: AuthTabs,
+        children: [
+            {
+                path: 'login',
+                component: Login
+            },
+            {
+                path: 'createAccount',
+                component: CreateAccount
+            },
+        ]
     },
     {
         path: '/tabs/',
@@ -52,7 +59,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     if (to.meta.authenticated) {
         if (!store.getters.isAuthenticated) 
-            next("/login");
+            next("/auth/login");
         else
             next();
         return;

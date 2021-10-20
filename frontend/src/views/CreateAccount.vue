@@ -35,7 +35,6 @@
                             <ion-input type="password" autocomplete="new-password" v-model="password2" />
                         </ion-item>
                         <ion-button expand="block" color="primary" class="mb-2" @click="onSubmit">Submit</ion-button>
-                        <ion-button expand="block" color="medium" router-link="/login">Back to Login</ion-button>
                     </ion-card-content>
                 </ion-card>
             </div>
@@ -46,7 +45,6 @@
 
 <script>
 import { Http } from "@capacitor-community/http";
-import { mapGetters } from "vuex";
 import vars from "../variables.ts";
 
 import {
@@ -75,16 +73,6 @@ export default {
             password1: "",
             password2: ""
         };
-    },
-    computed: {
-        ...mapGetters(["isAuthenticated"])
-    },
-    watch: {
-        // automatically redirect user when logged in
-        isAuthenticated(val) {
-            if (val)
-                this.$router.push("/tabs/");
-        }
     },
     methods: {
         async onSubmit() {

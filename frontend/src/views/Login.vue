@@ -23,26 +23,25 @@
                             <ion-input type="password" autocomplete="current-password" v-model="password" />
                         </ion-item>
                         <ion-button expand="block" color="primary" class="mb-2" @click="doLogin">Submit</ion-button>
-                        <ion-button expand="block" color="medium" router-link="/create_account">Create Account</ion-button>
                     </ion-card-content>
                 </ion-card>
             </div>
         </ion-content>
 
-  </ion-page>
+    </ion-page>
 </template>
 
 <script>
 import { Http } from "@capacitor-community/http";
-import { mapGetters } from "vuex";
 import vars from "../variables.ts";
 
 import { 
+    toastController,
     IonPage, IonHeader, IonToolbar,
     IonTitle, IonContent, IonInput,
     IonLabel, IonItem, IonCard,
     IonCardHeader, IonCardContent, IonCardTitle,
-    IonButton, toastController
+    IonButton 
 } from '@ionic/vue';
 
 
@@ -60,19 +59,6 @@ export default {
             email: "",
             password: ""
         };
-    },
-    computed: {
-        ...mapGetters(["isAuthenticated"])
-    },
-    watch: {
-        isAuthenticated(val) {
-            // automatically redirect user when logged in
-            if (val)
-                this.$router.push("/tabs/");
-        }
-    },
-    mounted() {
-        this.$store.dispatch("restoreLogin");
     },
     methods: {
         async doLogin() {
