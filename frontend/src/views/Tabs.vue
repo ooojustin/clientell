@@ -9,9 +9,9 @@
                     <ion-label>Home</ion-label>
                 </ion-tab-button>
               
-                <ion-tab-button tab="tab2" href="/tabs/tab2">
-                    <ion-icon :icon="ellipse" />
-                    <ion-label>Tab 2</ion-label>
+                <ion-tab-button tab="search" href="/tabs/search">
+                    <ion-icon :icon="searchSharp" />
+                    <ion-label>Search</ion-label>
                 </ion-tab-button>
                 
                 <ion-tab-button tab="settings" href="/tabs/settings">
@@ -26,13 +26,13 @@
 
 <script lang="ts">
 import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet } from '@ionic/vue';
-import { ellipse, settingsSharp, homeSharp } from 'ionicons/icons';
+import { searchSharp, settingsSharp, homeSharp } from 'ionicons/icons';
 
 export default {
     name: 'Tabs',
     components: { IonLabel, IonTabs, IonTabBar, IonTabButton, IonIcon, IonPage, IonRouterOutlet },
     setup() {
-        return { ellipse, settingsSharp, homeSharp };
+        return { searchSharp, settingsSharp, homeSharp };
     }
 }
 </script>

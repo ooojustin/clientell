@@ -38,8 +38,8 @@ const routes: Array<RouteRecordRaw> = [
                 meta: { authenticated: true }
             },
             {
-                path: 'tab2',
-                component: () => import('@/views/Tab2.vue'),
+                path: 'search',
+                component: () => import('@/views/Search.vue'),
                 meta: { authenticated: true }
             },
             {

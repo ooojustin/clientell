@@ -41,7 +41,13 @@ func (u UserController) Logout(c *gin.Context) {
 		// randomly generate user token and save
 		user := ret.(*models.User)
 		user.Token = uuid.NewV4()
-		models.SaveUser(user)
+		if err := models.SaveUser(user); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"success": false,
+				"error":   err.Error(),
+			})
+			return
+		}
 		c.JSON(http.StatusOK, gin.H{"success": true})
 	} else {
 		c.JSON(http.StatusUnauthorized, gin.H{"success": false})
