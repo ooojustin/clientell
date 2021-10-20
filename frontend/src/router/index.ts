@@ -18,11 +18,11 @@ const routes: Array<RouteRecordRaw> = [
         children: [
             {
                 path: '',
-                redirect: '/tabs/tab1' 
+                redirect: '/tabs/home' 
             },
             {
-                path: 'tab1',
-                component: () => import('@/views/Tab1.vue'),
+                path: 'home',
+                component: () => import('@/views/Home.vue'),
                 meta: { authenticated: true }
             },
             {
