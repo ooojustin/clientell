@@ -1,13 +1,14 @@
 <template>
     <div>
-        <p>Found {{ data.length }} results</p>
-        <br />
-        <Person v-for="person in data" :data="person" :key="person.ID" />
+        <div class="ml-3 my-3" v-if="data">
+            Found {{ data.length }} results
+        </div>
+        <PersonCard v-for="person in data" :data="person" :key="person.ID" />
     </div>
 </template>
 
 <script>
-import Person from "./Person.vue";
+import PersonCard from "./PersonCard.vue";
 
 export default {
     name: 'People',
@@ -15,7 +16,7 @@ export default {
         data: Array
     },
     components: {
-        Person
+        PersonCard
     }
 }
 </script>
