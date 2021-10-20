@@ -15,7 +15,7 @@ func (p PersonController) Search(c *gin.Context) {
 	c.BindJSON(&psf)
 
 	var people []models.Person
-	err := models.DB.Raw("SELECT * FROM people WHERE (first_name LIKE ? AND last_name LIKE ?)", psf.FirstName, psf.LastName).Scan(&people).Error
+	err := models.DB.Raw("SELECT * FROM people WHERE (first_name LIKE ? AND last_name LIKE ?)", psf.FirstName+"%", psf.LastName+"%").Scan(&people).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,

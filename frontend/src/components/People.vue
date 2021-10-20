@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="ml-3 my-3" v-if="data">
-            Found {{ data.length }} results
+            Found {{ data.length }} result(s)
         </div>
         <PersonCard v-for="person in data" :data="person" :key="person.ID" />
     </div>

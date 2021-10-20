@@ -3,24 +3,23 @@
 
         <ion-header>
             <ion-toolbar>
-                <ion-title>Search by name</ion-title>
+                <ion-buttons slot="start">
+                    <ion-back-button></ion-back-button>
+                </ion-buttons>
+                <ion-title>Create Person</ion-title>
             </ion-toolbar>
         </ion-header>
 
         <ion-content :fullscreen="true">
             <ion-item>
                 <ion-label position="floating">First Name</ion-label>
-                <ion-input type="text" autocomplete="given-name" v-model="firstName" />
+                <ion-input type="text" v-model="firstName" />
             </ion-item>
             <ion-item>
                 <ion-label position="floating">Last Name</ion-label>
-                <ion-input type="text" autocomplete="family-name" v-model="lastName" />
+                <ion-input type="text" v-model="lastName" />
             </ion-item>
-            <ion-button expand="block" color="primary" @click="doSearch" class="mx-3 mt-3">Search</ion-button>
-            <ion-button expand="block" color="success" router-link="/createPerson" class="mx-3 mt-3">Add Person</ion-button>
-
-            <People :data="people" />
-
+            <ion-button expand="block" color="primary" @click="doCreate" class="mx-3 mt-3">Create</ion-button>
         </ion-content>
 
     </ion-page>
@@ -30,36 +29,34 @@
 import { Http } from "@capacitor-community/http";
 import vars from "../variables.ts";
 
-import People from "../components/People.vue";
-
 import {
     toastController,
     IonPage, IonHeader, IonToolbar,
-    IonTitle, IonContent, IonItem,
-    IonLabel, IonInput, IonButton
+    IonTitle, IonContent, IonButtons,
+    IonBackButton, IonItem, IonLabel,
+    IonInput, IonButton
 } from '@ionic/vue';
 
 export default {
-    name: 'SearchByName',
+    name: 'Home',
     components: {
-        People,
         IonPage, IonHeader, IonToolbar,
-        IonTitle, IonContent, IonItem,
-        IonLabel, IonInput, IonButton
+        IonTitle, IonContent, IonButtons,
+        IonBackButton, IonItem, IonLabel,
+        IonInput, IonButton
     },
     data() {
         return {
-            people: null,
             firstName: "",
             lastName: ""
-        }
+        };
     },
     methods: {
-        async doSearch() {
-
+        async doCreate() {
+            
             const { token } = this.$store.state;
             const response = await Http.post({
-                url: `${vars.backend}/person/search`,
+                url: `${vars.backend}/person/create`,
                 headers: { Token: token },
                 data: {
                     firstName: this.firstName,
@@ -69,12 +66,21 @@ export default {
 
             const { data, status } = response;
             if (status == 200) {
-                this.people = data.data;
+
+                // show alert that a new person has been created
+                const toast = await toastController.create({
+                    message: "New person has been created.",
+                    duration: 3000,
+                    position: "top",
+                    color: "success"
+                });
+                toast.present();
+
             } else {
 
-                // show alert that search failed, for an unknown reason
+                // show alert that we failed to create the person
                 const toast = await toastController.create({
-                    message: "Failed to submit search.",
+                    message: "Failed to create new person.",
                     duration: 3000,
                     position: "top",
                     color: "danger"
@@ -82,6 +88,9 @@ export default {
                 toast.present();
 
             }
+    
+            // go back to previous route
+            this.$router.go(-1);
 
         }
     }
