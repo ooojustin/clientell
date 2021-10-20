@@ -20,12 +20,19 @@ func SetupDatabase() {
 }
 
 func SetupRouter() {
-	// initialize router, routes, and middlewares
+
+	// create router and cors configuration
 	router = gin.Default()
-	router.Use(cors.Default())
+	router.Use(cors.New(cors.Config{
+		AllowAllOrigins: true,
+		AllowHeaders:    []string{"Token"},
+	}))
+
+	// add routes & enable authentication middleware
 	UnauthorizedRoutes()
 	router.Use(middlewares.AuthMiddleware())
 	AuthorizedRoutes()
+
 }
 
 func UnauthorizedRoutes() {
