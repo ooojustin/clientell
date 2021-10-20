@@ -16,6 +16,7 @@ func SetupDatabase() {
 	// initialize database connection and migrate models
 	models.InitDatabase()
 	models.DB.AutoMigrate(&models.User{})
+	models.DB.AutoMigrate(&models.Person{})
 }
 
 func SetupRouter() {
@@ -56,6 +57,9 @@ func AuthorizedRoutes() {
 	router.GET("/user", user.TokenRetrieve)
 	router.PATCH("/user", user.Update)
 	router.POST("/logout", user.Logout)
+
+	person := new(controllers.PersonController)
+	router.POST("/person/create", person.Create)
 
 }
 
