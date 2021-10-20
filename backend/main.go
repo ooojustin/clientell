@@ -52,6 +52,8 @@ func UnauthorizedRoutes() {
 func AuthorizedRoutes() {
 	// initialize requests that require a token
 
+	router.GET("/places", controllers.SearchPlaces)
+
 	user := new(controllers.UserController)
 	router.GET("/user/:id", user.Retrieve)
 	router.GET("/user", user.TokenRetrieve)
