@@ -60,6 +60,7 @@ func AuthorizedRoutes() {
 
 	person := new(controllers.PersonController)
 	router.POST("/person/create", person.Create)
+	router.POST("/person/search", person.Search)
 
 }
 

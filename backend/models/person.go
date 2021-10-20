@@ -8,3 +8,9 @@ type Person struct {
 	LastName  string         `json:"lastName" gorm:"size:128"`
 	Address   datatypes.JSON `json:"address"`
 }
+
+type PersonSearchForm struct {
+	FirstName string                 `json:"firstName"`
+	LastName  string                 `json:"lastName"`
+	Address   map[string]interface{} `json:"address"`
+}
