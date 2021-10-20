@@ -61,14 +61,16 @@ export default {
     },
     methods: {
         async printCreds() {
+
             const { email, password } = this;
             const response = await Http.post({
                 url: `${vars.backend}/login`,
                 data: { email, password }
             }); 
+
             const { data, status } = response;
             if (status == 200) {
-                const { token } = data.data;
+
                 const toast = await toastController.create({
                     message: "Logged in successfully.",
                     duration: 3000,
@@ -76,8 +78,13 @@ export default {
                     color: "success"
                 });
                 toast.present();
+
+                const { token } = data.data;
                 this.$store.dispatch("setToken", { token });
+                this.$router.push("/tabs/");
+
             } else {
+
                 const toast = await toastController.create({
                     message: "Failed to login with those credentials.",
                     duration: 3000,
@@ -85,7 +92,9 @@ export default {
                     color: "danger"
                 });
                 toast.present();
+
             }
+
         }
     }
 }

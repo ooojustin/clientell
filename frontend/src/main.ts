@@ -27,7 +27,7 @@ import './theme/variables.css';
 import './theme/tailwind.css';
 
 // vuex store
-import { store } from './store';
+import store from './store/index';
 
 const app = createApp(App)
   .use(IonicVue)

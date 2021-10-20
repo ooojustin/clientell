@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 
-export const store = createStore({
+export default createStore({
 
     state() {
         return {
@@ -18,6 +18,12 @@ export const store = createStore({
         setToken(state: any, payload: { token: string }) {
             state.token = payload.token;
             console.log("set token to:", state.token);
+        }
+    },
+
+    getters: {
+        isAuthenticated(state: any) {
+            return state.token.length > 0;
         }
     }
 
