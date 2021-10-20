@@ -26,6 +26,7 @@ func SetupRouter() {
 	router.Use(cors.New(cors.Config{
 		AllowAllOrigins: true,
 		AllowHeaders:    []string{"Token"},
+		AllowMethods:    []string{"GET", "POST", "PATCH", "PUT", "HEAD"},
 	}))
 
 	// add routes & enable authentication middleware
