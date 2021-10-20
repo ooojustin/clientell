@@ -10,6 +10,20 @@ import (
 
 type UserController struct{}
 
+func (u UserController) TokenRetrieve(c *gin.Context) {
+	// get user from request context
+	// it'll be set via the AuthMiddleware handler in middlewares/auth.go
+	user, ok := c.Get("user")
+	if ok {
+		c.JSON(http.StatusOK, gin.H{
+			"success": true,
+			"data":    user,
+		})
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{"success": false})
+	}
+}
+
 func (u UserController) Login(c *gin.Context) {
 
 	ulf := &models.UserLoginForm{}
