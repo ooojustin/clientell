@@ -69,6 +69,9 @@ export default {
                 this.$router.push("/tabs/");
         }
     },
+    mounted() {
+        this.$store.dispatch("restoreLogin");
+    },
     methods: {
         async printCreds() {
 
