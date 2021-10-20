@@ -11,11 +11,29 @@ import (
 
 type UserController struct{}
 
+func (u UserController) Update(c *gin.Context) {
+	ret, ok := c.Get("user")
+	if ok {
+		uuf := &models.UserUpdateForm{}
+		c.BindJSON(&uuf)
+		user := ret.(*models.User)
+		user.FirstName = uuf.FirstName
+		user.LastName = uuf.LastName
+		models.SaveUser(user)
+		c.JSON(http.StatusOK, gin.H{
+			"success": true,
+			"data":    user,
+		})
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{"success": false})
+	}
+}
+
 func (u UserController) Logout(c *gin.Context) {
 	ret, ok := c.Get("user")
-	user := ret.(*models.User)
 	if ok {
 		// randomly generate user token and save
+		user := ret.(*models.User)
 		user.Token = uuid.NewV4()
 		models.SaveUser(user)
 		c.JSON(http.StatusOK, gin.H{"success": true})

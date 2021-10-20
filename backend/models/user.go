@@ -29,6 +29,11 @@ type UserLoginForm struct {
 	Password string `json:"password"`
 }
 
+type UserUpdateForm struct {
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+}
+
 func SaveUser(user *User) error {
 	if err := db.DB.Save(user).Error; err != nil {
 		return err
