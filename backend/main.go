@@ -54,6 +54,7 @@ func AuthorizedRoutes() {
 	user := new(controllers.UserController)
 	router.GET("/user/:id", user.Retrieve)
 	router.GET("/user", user.TokenRetrieve)
+	router.POST("/logout", user.Logout)
 
 }
 

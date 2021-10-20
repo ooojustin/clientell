@@ -4,11 +4,25 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"rc.justin.ooo/models"
 )
 
 type UserController struct{}
+
+func (u UserController) Logout(c *gin.Context) {
+	ret, ok := c.Get("user")
+	user := ret.(*models.User)
+	if ok {
+		// randomly generate user token and save
+		user.Token = uuid.NewV4()
+		models.SaveUser(user)
+		c.JSON(http.StatusOK, gin.H{"success": true})
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{"success": false})
+	}
+}
 
 func (u UserController) TokenRetrieve(c *gin.Context) {
 	// get user from request context
