@@ -15,6 +15,9 @@ export default createStore({
         loggedIn({ commit }, payload) {
             commit("loggedIn", payload);
         },
+        logout({ commit }) {
+            commit("logout");
+        },
         async restoreLogin({ commit }) {
 
             // look for token in local storage
@@ -43,6 +46,11 @@ export default createStore({
             state.user = payload;
             state.token = payload.token;
             localStorage.setItem("token", state.token);
+        },
+        logout(state: any) {
+            state.user = null;
+            state.token = "";
+            localStorage.removeItem("token");
         }
     },
 

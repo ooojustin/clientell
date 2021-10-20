@@ -43,8 +43,8 @@ const routes: Array<RouteRecordRaw> = [
                 meta: { authenticated: true }
             },
             {
-                path: 'tab3',
-                component: () => import('@/views/Tab3.vue'),
+                path: 'settings',
+                component: () => import('@/views/Settings.vue'),
                 meta: { authenticated: true }
             }
         ]
