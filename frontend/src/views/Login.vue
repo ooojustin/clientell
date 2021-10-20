@@ -66,6 +66,7 @@ export default {
     },
     watch: {
         isAuthenticated(val) {
+            // automatically redirect user when logged in
             if (val)
                 this.$router.push("/tabs/");
         }
@@ -76,6 +77,7 @@ export default {
     methods: {
         async doLogin() {
 
+            // send web request to log user in with credentials
             const { email, password } = this;
             const response = await Http.post({
                 url: `${vars.backend}/login`,
@@ -85,6 +87,7 @@ export default {
             const { data, status } = response;
             if (status == 200) {
 
+                // show notification that the user was logged in successfully
                 const toast = await toastController.create({
                     message: "Logged in successfully.",
                     duration: 3000,
@@ -93,11 +96,13 @@ export default {
                 });
                 toast.present();
 
+                // log user into their account
                 const user = data.data;
                 this.$store.dispatch("loggedIn", user);
 
             } else {
 
+                // failed to login, show error notification
                 const toast = await toastController.create({
                     message: "Failed to login with those credentials.",
                     duration: 3000,

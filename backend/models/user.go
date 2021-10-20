@@ -10,16 +10,16 @@ import (
 
 type User struct {
 	gorm.Model
-	FirstName string    `json:"first_name" gorm:"size:128"`
-	LastName  string    `json:"last_name" gorm:"size:128"`
+	FirstName string    `json:"firstName" gorm:"size:128"`
+	LastName  string    `json:"lastName" gorm:"size:128"`
 	Email     string    `json:"email" gorm:"size:128,unique"`
 	Password  string    `json:"-"`
 	Token     uuid.UUID `json:"token"`
 }
 
 type UserCreateForm struct {
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
 	Email     string `json:"email"`
 	Password  string `json:"password"`
 }
