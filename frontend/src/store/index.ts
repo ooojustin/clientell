@@ -4,20 +4,21 @@ export default createStore({
 
     state() {
         return {
+            user: null,
             token: ""
         };
     },
 
     actions: {
-        setToken({ commit }, payload) {
-            commit("setToken", payload);
+        loggedIn({ commit }, payload) {
+            commit("loggedIn", payload);
         }
     },
 
     mutations: {
-        setToken(state: any, payload: { token: string }) {
+        loggedIn(state: any, payload: any) {
+            state.user = payload;
             state.token = payload.token;
-            console.log("set token to:", state.token);
         }
     },
 

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import Login from '../views/Login.vue';
+import store from '../store/index';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -44,7 +45,13 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    //console.log(to);
+    if (to.meta.authenticated) {
+        if (!store.getters.isAuthenticated) 
+            next("/login");
+        else
+            next();
+        return;
+    } 
     next();
 });
 

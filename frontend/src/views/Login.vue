@@ -33,6 +33,7 @@
 
 <script>
 import { Http } from "@capacitor-community/http";
+import { mapGetters } from "vuex";
 import vars from "../variables.ts";
 
 import { 
@@ -59,6 +60,15 @@ export default {
             password: ""
         };
     },
+    computed: {
+        ...mapGetters(["isAuthenticated"])
+    },
+    watch: {
+        isAuthenticated(val) {
+            if (val)
+                this.$router.push("/tabs/");
+        }
+    },
     methods: {
         async printCreds() {
 
@@ -79,9 +89,8 @@ export default {
                 });
                 toast.present();
 
-                const { token } = data.data;
-                this.$store.dispatch("setToken", { token });
-                this.$router.push("/tabs/");
+                const user = data.data;
+                this.$store.dispatch("loggedIn", user);
 
             } else {
 
