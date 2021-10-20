@@ -19,7 +19,13 @@ func (u UserController) Update(c *gin.Context) {
 		user := ret.(*models.User)
 		user.FirstName = uuf.FirstName
 		user.LastName = uuf.LastName
-		models.SaveUser(user)
+		if err := models.SaveUser(user); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"success": false,
+				"error":   err.Error(),
+			})
+			return
+		}
 		c.JSON(http.StatusOK, gin.H{
 			"success": true,
 			"data":    user,

@@ -4,8 +4,6 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-
-	"rc.justin.ooo/db"
 )
 
 type User struct {
@@ -35,14 +33,14 @@ type UserUpdateForm struct {
 }
 
 func SaveUser(user *User) error {
-	if err := db.DB.Save(user).Error; err != nil {
+	if err := DB.Save(user).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
 func CreateNewUser(user *User) error {
-	if err := db.DB.Create(user).Error; err != nil {
+	if err := DB.Create(user).Error; err != nil {
 		return err
 	}
 	return nil
@@ -50,7 +48,7 @@ func CreateNewUser(user *User) error {
 
 func UserFrom(field string, value string) (*User, error) {
 	var user User
-	err := db.DB.Table("users").Where(field+" = ?", value).First(&user).Error
+	err := DB.Table("users").Where(field+" = ?", value).First(&user).Error
 	if err != nil {
 		return nil, err
 	}
