@@ -9,6 +9,10 @@
 
         <ion-content :fullscreen="true">
             <ion-item>
+                <ion-label position="floating">Email</ion-label>
+                <ion-input type="email" v-model="email" readOnly />
+            </ion-item>
+            <ion-item>
                 <ion-label position="floating">First Name</ion-label>
                 <ion-input type="text" autocomplete="given-name" v-model="firstName" />
             </ion-item>
@@ -43,6 +47,7 @@ export default {
     },
     data() {
         return {
+            email: this.$store.state.user.email,
             firstName: this.$store.state.user.firstName,
             lastName: this.$store.state.user.lastName
         };
