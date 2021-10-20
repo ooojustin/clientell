@@ -38,14 +38,28 @@ const routes: Array<RouteRecordRaw> = [
                 meta: { authenticated: true }
             },
             {
-                path: 'search',
-                component: () => import('@/views/Search.vue'),
-                meta: { authenticated: true }
-            },
-            {
                 path: 'settings',
                 component: () => import('@/views/Settings.vue'),
                 meta: { authenticated: true }
+            },
+            {
+                path: 'search',
+                component: () => import('@/views/Search.vue'),
+                meta: { authenticated: true },
+                children: [
+                    {
+                        path: '',
+                        redirect: '/tabs/search/name'
+                    },
+                    {
+                        path: 'name',
+                        component: () => import('@/views/SearchByName.vue')
+                    },
+                    {
+                        path: 'address',
+                        component: () => import('@/views/SearchByAddress.vue')
+                    }
+                ]
             }
         ]
     }
