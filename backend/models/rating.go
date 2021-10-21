@@ -17,6 +17,11 @@ type Rating struct {
 	Comment  string  `json:"comment" gorm:"size:1000"`
 }
 
+func GetRating(personID string, ownerID string, rating *Rating) error {
+	err := DB.Table("ratings").Where("person_id = ? AND owner_id = ?", personID, ownerID).First(rating).Error
+	return err
+}
+
 func UpdateAverageStars(id string, db *gorm.DB) {
 
 	// get all ratings for person this rating is created for

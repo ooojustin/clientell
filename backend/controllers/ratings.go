@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,15 +14,13 @@ type RatingController struct{}
 
 func (r RatingController) Update(c *gin.Context) {
 
-	id := c.Param("id")
-
 	var rating models.Rating
 	c.BindJSON(&rating)
 
 	// find the authenticated users rating for this person
 	user, _ := c.Get("user")
 	var userRating models.Rating
-	err := models.DB.Table("ratings").Where("person_id = ? AND owner_id = ?", id, user.(*models.User).ID).First(&userRating).Error
+	err := models.GetRating(c.Param("id"), fmt.Sprint(user.(*models.User).ID), &userRating)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
@@ -30,6 +29,7 @@ func (r RatingController) Update(c *gin.Context) {
 		return
 	}
 
+	// copy rating variables to db record instance and save
 	userRating.Comment = rating.Comment
 	userRating.Stars = rating.Stars
 	models.DB.Save(&userRating)
@@ -43,12 +43,12 @@ func (r RatingController) Update(c *gin.Context) {
 
 func (r RatingController) Retrieve(c *gin.Context) {
 
-	id := c.Param("id")
-
-	// find the authenticated users rating for this person
+	// get authenticated users rating for specified person
 	user, _ := c.Get("user")
 	var userRating models.Rating
-	err := models.DB.Table("ratings").Where("person_id = ? AND owner_id = ?", id, user.(*models.User).ID).First(&userRating).Error
+	err := models.GetRating(c.Param("id"), fmt.Sprint(user.(*models.User).ID), &userRating)
+
+	// handle error if record does not exist
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
@@ -66,12 +66,12 @@ func (r RatingController) Retrieve(c *gin.Context) {
 
 func (r RatingController) Delete(c *gin.Context) {
 
-	id := c.Param("id")
-
 	// find the authenticated users rating for this person
 	user, _ := c.Get("user")
 	var userRating models.Rating
-	err := models.DB.Table("ratings").Where("person_id = ? AND owner_id = ?", id, user.(*models.User).ID).First(&userRating).Error
+	err := models.GetRating(c.Param("id"), fmt.Sprint(user.(*models.User).ID), &userRating)
+
+	// handle exception if record isnt found
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
@@ -90,7 +90,7 @@ func (r RatingController) Delete(c *gin.Context) {
 	}
 
 	// trigger update avg star count for person
-	models.UpdateAverageStars(id, models.DB)
+	models.UpdateAverageStars(c.Param("id"), models.DB)
 
 	c.JSON(http.StatusOK, gin.H{"success": true})
 
@@ -114,9 +114,8 @@ func (r RatingController) Create(c *gin.Context) {
 	// if that's the case, prevent them from creating another rating
 	user, _ := c.Get("user")
 	var userRating models.Rating
-	err = models.DB.Table("ratings").Where("person_id = ? AND owner_id = ?", id, user.(*models.User).ID).First(&userRating).Error
-	noUserRating := errors.Is(err, gorm.ErrRecordNotFound)
-	if !noUserRating {
+	err = models.GetRating(id, fmt.Sprint(user.(*models.User).ID), &userRating)
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
 			"error":   "You have already rated this user.",
