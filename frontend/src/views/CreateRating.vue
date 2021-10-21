@@ -25,7 +25,8 @@
                 <ion-label position="floating">Comment</ion-label>
                 <ion-textarea v-model="comment"></ion-textarea>
             </ion-item>
-            <ion-button expand="block" color="primary" @click="doCreate" class="mx-3 mt-3">Create</ion-button>
+            <ion-button expand="block" color="primary" @click="doCreate" class="mx-3 mt-3" v-if="!isEditing">Create</ion-button>
+            <ion-button expand="block" color="primary" @click="doSave" class="mx-3 mt-3" v-if="isEditing">Save</ion-button>
         </ion-content>
 
     </ion-page>
@@ -59,7 +60,44 @@ export default {
             stars: "5"
         };
     },
+    async created() {
+        if (this.isEditing)
+            await this.loadExistingRating();
+    },
     methods: {
+        async loadExistingRating() {
+
+            const { id } = this.$route.params;
+            const { token } = this.$store.state;
+            const response = await Http.get({
+                url: `${vars.backend}/person/${id}/rating`,
+                headers: { Token: token },
+            });
+
+            const { data, status } = response;
+            if (status == 200) {
+                console.log(data);
+                this.stars = data.data.stars.toString();
+                this.comment = data.data.comment;
+            } else {
+
+                const toast = await toastController.create({
+                    message: "An error occurred while loading your rating.",
+                    duration: 3000,
+                    position: "top",
+                    color: "danger"
+                });
+                toast.present();
+
+                this.$router.go(-1);
+
+            }
+
+        },
+        async doSave() {
+            // TODO
+            return;
+        },
         async doCreate() {
 
             const { id } = this.$route.params;
@@ -98,6 +136,12 @@ export default {
             
             this.$router.go(-1);
 
+        }
+    },
+    computed: {
+        isEditing() {
+            const { edit } = this.$route.query;
+            return edit !== undefined;
         }
     }
 }

@@ -23,9 +23,14 @@
             <ion-button expand="block" color="success" class="mx-3 mt-6" v-if="canRate" @click="openCreateRating">
                 Add Rating
             </ion-button>
-            <ion-button expand="block" color="danger" class="mx-3 mt-6" v-if="!canRate" @click="deleteRating">
-                Delete Rating
-            </ion-button>
+            <span v-if="!canRate">
+                <ion-button expand="block" color="warning" class="mx-3 mt-6" @click="openEditRating">
+                    Edit Rating
+                </ion-button>
+                <ion-button expand="block" color="danger" class="mx-3 mt-3" @click="deleteRating">
+                    Delete Rating
+                </ion-button>
+            </span>
 
             <div v-if="ratings" class="mt-6">
                 <div class="ml-3 mb-2">
@@ -151,6 +156,9 @@ export default {
         },
         openCreateRating() {
             this.$router.push("/createRating/" + this.$route.params.id);
+        },
+        openEditRating() {
+            this.$router.push("/createRating/" + this.$route.params.id + "?edit=true");
         }
     },
     watch: {
