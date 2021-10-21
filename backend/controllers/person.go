@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"rc.justin.ooo/models"
 )
 
@@ -25,11 +27,18 @@ func (p PersonController) Retrieve(c *gin.Context) {
 	var ratings []models.Rating
 	err = models.DB.Table("ratings").Where("person_id = ?", id).Find(&ratings).Error
 
+	// check if authenticated user has already rated the person
+	user, _ := c.Get("user")
+	var userRating models.Rating
+	err = models.DB.Table("ratings").Where("person_id = ? AND owner_id = ?", id, user.(*models.User).ID).First(&userRating).Error
+	noUserRating := errors.Is(err, gorm.ErrRecordNotFound)
+
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"data": gin.H{
 			"person":  person,
 			"ratings": ratings,
+			"canRate": noUserRating,
 		},
 	})
 

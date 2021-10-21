@@ -7,7 +7,7 @@ type Person struct {
 	FirstName    string         `json:"firstName" gorm:"size:128"`
 	LastName     string         `json:"lastName" gorm:"size:128"`
 	Address      datatypes.JSON `json:"address"`
-	AverageStars float64        `json:"avg_stars"`
+	AverageStars float64        `json:"avgStars"`
 }
 
 type PersonSearchForm struct {

@@ -20,11 +20,16 @@
                     {{ person.address.formatted_address }}
                 </div>
             </div>
-            <ion-button expand="block" color="success" class="mx-3 mt-6" @click="openCreateRating">
+            <ion-button expand="block" color="success" class="mx-3 mt-6" v-if="canRate" @click="openCreateRating">
                 Add Rating
             </ion-button>
 
             <div v-if="ratings" class="mt-6">
+                <div class="ml-3 mb-2">
+                    {{ ratings.length }} total ratings
+                    <br />
+                    Average Stars: {{ person.avgStars }}
+                </div>
                 <Rating v-for="rating in ratings" :data="rating" :key="rating.ID" />
             </div>
 
@@ -57,7 +62,8 @@ export default {
     data() {
         return {
             person: null,
-            ratings: null
+            ratings: null,
+            canRate: false
         };
     },
     async created() {
@@ -81,6 +87,7 @@ export default {
                 // update data in component state
                 this.person = data.data.person;
                 this.ratings = data.data.ratings;
+                this.canRate = data.data.canRate;
 
             } else {
                 
