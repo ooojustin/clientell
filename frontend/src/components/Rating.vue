@@ -2,10 +2,12 @@
     <ion-card>
         <ion-card-content>
             <span>
-                Stars: {{ data.stars }}
+                <b>Stars:</b> {{ data.stars }}
             </span>
+            <br />
+            <br />
             <span v-if="data.comment.length > 0">
-                Comment:
+                <b>Comment:</b>
                 <br />
                 {{ data.comment }}
             </span>

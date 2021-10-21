@@ -32,7 +32,11 @@
 </template>
 
 <script>
+import { Http } from "@capacitor-community/http";
+import vars from "../variables.ts";
+
 import {
+    toastController,
     IonPage, IonHeader, IonToolbar,
     IonTitle, IonContent, IonButtons,
     IonBackButton, IonTextarea, IonItem,
@@ -57,7 +61,43 @@ export default {
     },
     methods: {
         async doCreate() {
-            return;
+
+            const { id } = this.$route.params;
+            const { token } = this.$store.state;
+            const response = await Http.post({
+                url: `${vars.backend}/person/${id}/rate`,
+                headers: { Token: token },
+                data: {
+                    stars: Number(this.stars),
+                    comment: this.comment
+                }
+            });
+
+            const { data, status } = response;
+            if (status == 200) {
+                
+                const toast = await toastController.create({
+                    message: "Your rating has been submitted.",
+                    duration: 3000,
+                    position: "top",
+                    color: "success"
+                });
+                toast.present();
+                
+            } else {
+
+                const toast = await toastController.create({
+                    message: "An error occurred while submitting your rating.",
+                    duration: 3000,
+                    position: "top",
+                    color: "danger"
+                });
+                toast.present();
+                
+            }
+            
+            this.$router.go(-2);
+
         }
     }
 }

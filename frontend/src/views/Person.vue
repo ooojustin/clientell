@@ -20,7 +20,7 @@
                     {{ person.address.formatted_address }}
                 </div>
             </div>
-            <ion-button expand="block" color="success" class="mx-3 mt-6" router-link="/createRating">
+            <ion-button expand="block" color="success" class="mx-3 mt-6" @click="openCreateRating">
                 Add Rating
             </ion-button>
 
@@ -61,39 +61,47 @@ export default {
         };
     },
     async created() {
-
-        const { id } = this.$route.params;
-        const { token } = this.$store.state;
-
-        // send request to load person data (includes ratings)
-        const response = await Http.get({
-            url: `${vars.backend}/person/` + id,
-            headers: { Token: token }
-        });
-
-        const { data, status } = response;
-        if (status == 200) {
-
-            // update data in component state
-            this.person = data.data.person;
-            this.ratings = data.data.ratings;
-
-        } else {
-            
-            // alert user that we couldnt load data about this person
-            const toast = await toastController.create({
-                message: "Failed to load person.",
-                duration: 3000,
-                position: "top",
-                color: "danger"
-            });
-            toast.present();
-
-            // go back to previous route
-            this.$router.go(-1);
-
-        }
-
+        await this.loadData();
     },
+    methods: {
+        async loadData() {
+
+            const { id } = this.$route.params;
+            const { token } = this.$store.state;
+
+            // send request to load person data (includes ratings)
+            const response = await Http.get({
+                url: `${vars.backend}/person/` + id,
+                headers: { Token: token }
+            });
+
+            const { data, status } = response;
+            if (status == 200) {
+
+                // update data in component state
+                this.person = data.data.person;
+                this.ratings = data.data.ratings;
+
+            } else {
+                
+                // alert user that we couldnt load data about this person
+                const toast = await toastController.create({
+                    message: "Failed to load person.",
+                    duration: 3000,
+                    position: "top",
+                    color: "danger"
+                });
+                toast.present();
+
+                // go back to previous route
+                this.$router.go(-1);
+
+            }
+
+        },
+        openCreateRating() {
+            this.$router.push("/createRating/" + this.$route.params.id);
+        }
+    }
 }
 </script>
