@@ -10,15 +10,28 @@
             </ion-toolbar>
         </ion-header>
 
-        <ion-content :fullscreen="true">
-            <!-- TODO -->
+        <ion-content v-if="person" :fullscreen="true">
+        
+            <div class="w-100 text-center text-2xl mt-5">
+                {{ person.firstName }} {{ person.lastName }}
+            </div>
+            <div class="flex justify-center">
+                <div class="w-60 text-center mt-2">
+                    {{ person.address.formatted_address }}
+                </div>
+            </div>
+
         </ion-content>
 
     </ion-page>
 </template>
 
 <script>
+import { Http } from "@capacitor-community/http";
+import vars from "../variables.ts";
+
 import {
+    toastController,
     IonPage, IonHeader, IonToolbar,
     IonTitle, IonContent, IonButtons,
     IonBackButton
@@ -31,8 +44,46 @@ export default {
         IonTitle, IonContent, IonButtons,
         IonBackButton
     },
-    created() {
-        console.log("ID", this.$route.params.id);
-    }
+    data() {
+        return {
+            person: null,
+            ratings: null
+        };
+    },
+    async created() {
+
+        const { id } = this.$route.params;
+        const { token } = this.$store.state;
+
+        // send request to load person data (includes ratings)
+        const response = await Http.get({
+            url: `${vars.backend}/person/` + id,
+            headers: { Token: token }
+        });
+
+        const { data, status } = response;
+        if (status == 200) {
+
+            // update data in component state
+            this.person = data.data.person;
+            this.ratings = data.data.ratings;
+
+        } else {
+            
+            // alert user that we couldnt load data about this person
+            const toast = await toastController.create({
+                message: "Failed to load person.",
+                duration: 3000,
+                position: "top",
+                color: "danger"
+            });
+            toast.present();
+
+            // go back to previous route
+            this.$router.go(-1);
+
+        }
+
+    },
 }
 </script>
