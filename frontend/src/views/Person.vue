@@ -20,6 +20,9 @@
                     {{ person.address.formatted_address }}
                 </div>
             </div>
+            <ion-button expand="block" color="success" class="mx-3 mt-6" router-link="/createRating">
+                Add Rating
+            </ion-button>
 
             <div v-if="ratings" class="mt-6">
                 <Rating v-for="rating in ratings" :data="rating" :key="rating.ID" />
@@ -40,7 +43,7 @@ import {
     toastController,
     IonPage, IonHeader, IonToolbar,
     IonTitle, IonContent, IonButtons,
-    IonBackButton
+    IonBackButton, IonButton
 } from '@ionic/vue';
 
 export default {
@@ -49,7 +52,7 @@ export default {
         Rating,
         IonPage, IonHeader, IonToolbar,
         IonTitle, IonContent, IonButtons,
-        IonBackButton
+        IonBackButton, IonButton
     },
     data() {
         return {
