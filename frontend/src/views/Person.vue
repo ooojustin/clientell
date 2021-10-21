@@ -21,6 +21,10 @@
                 </div>
             </div>
 
+            <div v-if="ratings" class="mt-6">
+                <Rating v-for="rating in ratings" :data="rating" :key="rating.ID" />
+            </div>
+
         </ion-content>
 
     </ion-page>
@@ -29,6 +33,8 @@
 <script>
 import { Http } from "@capacitor-community/http";
 import vars from "../variables.ts";
+
+import Rating from "../components/Rating.vue";
 
 import {
     toastController,
@@ -40,6 +46,7 @@ import {
 export default {
     name: 'Person',
     components: {
+        Rating,
         IonPage, IonHeader, IonToolbar,
         IonTitle, IonContent, IonButtons,
         IonBackButton
