@@ -1,5 +1,5 @@
 <template>
-    <ion-card>
+    <ion-card @click="openPerson">
         <ion-card-header>
             <ion-card-title>
                 {{ data.firstName }} {{ data.lastName }}
@@ -25,6 +25,11 @@ export default {
     components: {
         IonCard, IonCardHeader, IonCardTitle,
         IonCardContent
+    },
+    methods: {
+        openPerson() {
+            this.$router.push("/person/" + this.data.ID);
+        }
     }
 }
 </script>

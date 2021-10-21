@@ -67,6 +67,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/createPerson',
         component: () => import('@/views/CreatePerson.vue'),
         meta: { authenticated: true }
+    },
+    {
+        path: '/person/:id',
+        component: () => import('@/views/Person.vue'),
+        meta: { authenticated: true }
     }
 ];
 
