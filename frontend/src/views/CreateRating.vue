@@ -65,7 +65,7 @@ export default {
             const { id } = this.$route.params;
             const { token } = this.$store.state;
             const response = await Http.post({
-                url: `${vars.backend}/person/${id}/rate`,
+                url: `${vars.backend}/person/${id}/createRating`,
                 headers: { Token: token },
                 data: {
                     stars: Number(this.stars),

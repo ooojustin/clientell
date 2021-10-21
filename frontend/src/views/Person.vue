@@ -23,6 +23,9 @@
             <ion-button expand="block" color="success" class="mx-3 mt-6" v-if="canRate" @click="openCreateRating">
                 Add Rating
             </ion-button>
+            <ion-button expand="block" color="danger" class="mx-3 mt-6" v-if="!canRate" @click="deleteRating">
+                Delete Rating
+            </ion-button>
 
             <div v-if="ratings" class="mt-6">
                 <div class="ml-3 mb-2">
@@ -104,6 +107,44 @@ export default {
 
                 // go back to previous route
                 this.$router.go(-1);
+
+            }
+
+        },
+        async deleteRating() {
+
+            const { id } = this.$route.params;
+            const { token } = this.$store.state;
+            if (!id) // prevent bad request from firing
+                return;
+
+            // send request to delete rating
+            const response = await Http.post({
+                url: `${vars.backend}/person/${id}/deleteRating`,
+                headers: { Token: token }
+            });
+
+            if (response.status == 200) {
+
+                const toast = await toastController.create({
+                    message: "Your rating has been removed.",
+                    duration: 3000,
+                    position: "top",
+                    color: "success"
+                });
+                toast.present();
+                
+                await this.loadData();
+
+            } else {
+
+                const toast = await toastController.create({
+                    message: "Failed to load delete your rating.",
+                    duration: 3000,
+                    position: "top",
+                    color: "danger"
+                });
+                toast.present();
 
             }
 
