@@ -44,3 +44,9 @@ func (r *Rating) AfterCreate(tx *gorm.DB) (err error) {
 	UpdateAverageStars(personID, tx)
 	return nil
 }
+
+func (r *Rating) AfterUpdate(tx *gorm.DB) (err error) {
+	personID := fmt.Sprint(r.PersonID)
+	UpdateAverageStars(personID, tx)
+	return nil
+}

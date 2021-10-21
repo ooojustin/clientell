@@ -11,6 +11,36 @@ import (
 
 type RatingController struct{}
 
+func (r RatingController) Update(c *gin.Context) {
+
+	id := c.Param("id")
+
+	var rating models.Rating
+	c.BindJSON(&rating)
+
+	// find the authenticated users rating for this person
+	user, _ := c.Get("user")
+	var userRating models.Rating
+	err := models.DB.Table("ratings").Where("person_id = ? AND owner_id = ?", id, user.(*models.User).ID).First(&userRating).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   "You have no rating for this user.",
+		})
+		return
+	}
+
+	userRating.Comment = rating.Comment
+	userRating.Stars = rating.Stars
+	models.DB.Save(&userRating)
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    userRating,
+	})
+
+}
+
 func (r RatingController) Retrieve(c *gin.Context) {
 
 	id := c.Param("id")
