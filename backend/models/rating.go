@@ -4,6 +4,6 @@ type Rating struct {
 	ID       uint    `gorm:"primarykey"`
 	PersonID uint    `json:"-"`
 	Person   *Person `json:"person,omitempty" gorm:"foreignKey:PersonID;references:ID"`
-	Stars    float64 `json:"stars"`
+	Stars    int     `json:"stars"`
 	Comment  string  `json:"comment" gorm:"size:1000"`
 }
