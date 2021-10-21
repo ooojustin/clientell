@@ -14,8 +14,16 @@ func (p PersonController) Search(c *gin.Context) {
 	var psf models.PersonSearchForm
 	c.BindJSON(&psf)
 
+	var err error
 	var people []models.Person
-	err := models.DB.Raw("SELECT * FROM people WHERE (first_name LIKE ? AND last_name LIKE ?)", psf.FirstName+"%", psf.LastName+"%").Scan(&people).Error
+	if placeId, ok := psf.Address["place_id"]; ok {
+		// search by address - find rows which have the same place id
+		err = models.DB.Raw("SELECT * FROM people WHERE address LIKE ?", "%"+placeId.(string)+"%").Scan(&people).Error
+	} else {
+		// search by first and last name
+		err = models.DB.Raw("SELECT * FROM people WHERE first_name LIKE ? AND last_name LIKE ?", psf.FirstName+"%", psf.LastName+"%").Scan(&people).Error
+	}
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,

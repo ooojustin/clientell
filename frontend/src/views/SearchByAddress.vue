@@ -79,6 +79,8 @@ export default {
         },
         setAddress(address) {
             this.address = address;
+            if (!address)
+                this.people = null;
         }
     },
     computed: {
