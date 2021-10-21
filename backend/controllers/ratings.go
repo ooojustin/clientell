@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,6 +10,29 @@ import (
 )
 
 type RatingController struct{}
+
+func (r RatingController) Retrieve(c *gin.Context) {
+
+	id := c.Param("id")
+
+	// find the authenticated users rating for this person
+	user, _ := c.Get("user")
+	var userRating models.Rating
+	err := models.DB.Table("ratings").Where("person_id = ? AND owner_id = ?", id, user.(*models.User).ID).First(&userRating).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   "You have no rating for this user.",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    userRating,
+	})
+
+}
 
 func (r RatingController) Delete(c *gin.Context) {
 
@@ -27,8 +49,6 @@ func (r RatingController) Delete(c *gin.Context) {
 		})
 		return
 	}
-
-	fmt.Println(userRating)
 
 	// delete record from database
 	if err = models.DB.Delete(&userRating).Error; err != nil {
