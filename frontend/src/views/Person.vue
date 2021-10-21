@@ -152,6 +152,12 @@ export default {
         openCreateRating() {
             this.$router.push("/createRating/" + this.$route.params.id);
         }
+    },
+    watch: {
+        async $route (to, from) {
+            if (to.path.startsWith("/person/") && from.path.startsWith("/createRating/"))
+                await this.loadData();
+        }
     }
 }
 </script>
