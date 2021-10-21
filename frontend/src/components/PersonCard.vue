@@ -6,7 +6,7 @@
             </ion-card-title>
         </ion-card-header>
         <ion-card-content>
-            TODO
+            {{ data.address.formatted_address }}
         </ion-card-content>
     </ion-card>
 </template>
