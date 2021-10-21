@@ -9,6 +9,32 @@ import (
 
 type PersonController struct{}
 
+func (p PersonController) Retrieve(c *gin.Context) {
+
+	id := c.Param("id")
+	person, err := models.PersonFromID(id)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   err.Error(),
+		})
+	}
+
+	// retrieve ratings for this person from the database
+	var ratings []models.Rating
+	err = models.DB.Table("ratings").Where("person_id = ?", id).Find(&ratings).Error
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data": gin.H{
+			"person":  person,
+			"ratings": ratings,
+		},
+	})
+
+}
+
 func (p PersonController) Search(c *gin.Context) {
 
 	var psf models.PersonSearchForm

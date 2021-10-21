@@ -64,6 +64,7 @@ func AuthorizedRoutes() {
 	person := new(controllers.PersonController)
 	router.POST("/person/create", person.Create)
 	router.POST("/person/search", person.Search)
+	router.GET("/person/:id", person.Retrieve)
 
 	rating := new(controllers.RatingController)
 	router.GET("/person/:id/ratings", rating.List)
