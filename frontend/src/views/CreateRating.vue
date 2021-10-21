@@ -76,7 +76,6 @@ export default {
 
             const { data, status } = response;
             if (status == 200) {
-                console.log(data);
                 this.stars = data.data.stars.toString();
                 this.comment = data.data.comment;
             } else {
@@ -95,8 +94,43 @@ export default {
 
         },
         async doSave() {
-            // TODO
-            return;
+
+            const { id } = this.$route.params;
+            const { token } = this.$store.state;
+            const response = await Http.patch({
+                url: `${vars.backend}/person/${id}/editRating`,
+                headers: { Token: token },
+                data: {
+                    stars: Number(this.stars),
+                    comment: this.comment
+                }
+            });
+
+            const { data, status } = response;
+            if (status == 200) {
+                
+                const toast = await toastController.create({
+                    message: "Your rating has been saved.",
+                    duration: 3000,
+                    position: "top",
+                    color: "success"
+                });
+                toast.present();
+                
+            } else {
+
+                const toast = await toastController.create({
+                    message: "An error occurred while updating your rating.",
+                    duration: 3000,
+                    position: "top",
+                    color: "danger"
+                });
+                toast.present();
+                
+            }
+            
+            this.$router.go(-1);
+
         },
         async doCreate() {
 
