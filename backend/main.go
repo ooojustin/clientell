@@ -17,6 +17,7 @@ func SetupDatabase() {
 	models.InitDatabase()
 	models.DB.AutoMigrate(&models.User{})
 	models.DB.AutoMigrate(&models.Person{})
+	models.DB.AutoMigrate(&models.Rating{})
 }
 
 func SetupRouter() {
