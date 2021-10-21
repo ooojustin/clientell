@@ -17,14 +17,11 @@ type Rating struct {
 	Comment  string  `json:"comment" gorm:"size:1000"`
 }
 
-func (r *Rating) AfterCreate(tx *gorm.DB) (err error) {
-
-	// convert person uid to string
-	personID := fmt.Sprint(r.Person.ID)
+func UpdateAverageStars(id string, db *gorm.DB) {
 
 	// get all ratings for person this rating is created for
 	var ratings []Rating
-	tx.Table("ratings").Where("person_id = ?", personID).Find(&ratings)
+	db.Table("ratings").Where("person_id = ?", id).Find(&ratings)
 
 	// find average of users ratings
 	// (this can be done with a sql query too, but for loop for now)
@@ -36,10 +33,14 @@ func (r *Rating) AfterCreate(tx *gorm.DB) (err error) {
 	avg = math.Round(avg*100) / 100
 
 	// update average stars variable for person
-	person, _ := PersonFromID(personID)
+	person, _ := PersonFromID(id)
 	person.AverageStars = avg
-	tx.Save(person)
+	db.Save(person)
 
-	return nil // no error
+}
 
+func (r *Rating) AfterCreate(tx *gorm.DB) (err error) {
+	personID := fmt.Sprint(r.Person.ID)
+	UpdateAverageStars(personID, tx)
+	return nil
 }

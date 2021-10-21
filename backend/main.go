@@ -68,7 +68,8 @@ func AuthorizedRoutes() {
 
 	rating := new(controllers.RatingController)
 	router.GET("/person/:id/ratings", rating.List)
-	router.POST("/person/:id/rate", rating.Create)
+	router.POST("/person/:id/createRating", rating.Create)
+	router.POST("/person/:id/deleteRating", rating.Delete)
 
 }
 

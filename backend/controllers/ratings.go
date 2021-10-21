@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,6 +11,40 @@ import (
 )
 
 type RatingController struct{}
+
+func (r RatingController) Delete(c *gin.Context) {
+
+	id := c.Param("id")
+
+	// find the authenticated users rating for this person
+	user, _ := c.Get("user")
+	var userRating models.Rating
+	err := models.DB.Table("ratings").Where("person_id = ? AND owner_id = ?", id, user.(*models.User).ID).First(&userRating).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   "You have no rating for this user.",
+		})
+		return
+	}
+
+	fmt.Println(userRating)
+
+	// delete record from database
+	if err = models.DB.Delete(&userRating).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	// trigger update avg star count for person
+	models.UpdateAverageStars(id, models.DB)
+
+	c.JSON(http.StatusOK, gin.H{"success": true})
+
+}
 
 func (r RatingController) Create(c *gin.Context) {
 
@@ -22,6 +57,7 @@ func (r RatingController) Create(c *gin.Context) {
 			"success": false,
 			"error":   err.Error(),
 		})
+		return
 	}
 
 	// check if the authenticated user has already rated this person
@@ -35,6 +71,7 @@ func (r RatingController) Create(c *gin.Context) {
 			"success": false,
 			"error":   "You have already rated this user.",
 		})
+		return
 	}
 
 	// create rating and establish parameters
@@ -50,6 +87,7 @@ func (r RatingController) Create(c *gin.Context) {
 			"success": false,
 			"error":   err.Error(),
 		})
+		return
 	}
 
 	// return serialized rating
