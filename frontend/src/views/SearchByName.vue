@@ -16,7 +16,7 @@
                 <ion-label position="floating">Last Name</ion-label>
                 <ion-input type="text" autocomplete="family-name" v-model="lastName" />
             </ion-item>
-            <ion-button expand="block" color="primary" @click="doSearch" class="mx-3 mt-3">Search</ion-button>
+            <ion-button expand="block" color="primary" @click="doSearch" :disabled="disableSearch" class="mx-3 mt-3">Search</ion-button>
             <ion-button expand="block" color="success" router-link="/createPerson" class="mx-3 mt-3">Add Person</ion-button>
 
             <People :data="people" />
@@ -83,6 +83,11 @@ export default {
 
             }
 
+        }
+    },
+    computed: {
+        disableSearch() {
+            return this.firstName.length < 3 || this.lastName.length < 3;
         }
     }
 }

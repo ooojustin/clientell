@@ -19,7 +19,7 @@
                 <ion-label position="floating">Last Name</ion-label>
                 <ion-input type="text" v-model="lastName" />
             </ion-item>
-            <SelectAddress />
+            <SelectAddress @address-selected="setAddress" />
             <ion-button expand="block" color="primary" @click="doCreate" class="mx-3 mt-3">Create</ion-button>
         </ion-content>
 
@@ -51,7 +51,8 @@ export default {
     data() {
         return {
             firstName: "",
-            lastName: ""
+            lastName: "",
+            address: null
         };
     },
     methods: {
@@ -63,7 +64,8 @@ export default {
                 headers: { Token: token },
                 data: {
                     firstName: this.firstName,
-                    lastName: this.lastName
+                    lastName: this.lastName,
+                    address: this.address
                 }
             });
 
@@ -95,6 +97,9 @@ export default {
             // go back to previous route
             this.$router.go(-1);
 
+        },
+        setAddress(address) {
+            this.address = address;
         }
     }
 }

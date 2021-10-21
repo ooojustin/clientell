@@ -3,7 +3,7 @@
         <ion-label position="floating">Address</ion-label>
         <ion-input type="text" v-model="query" />
     </ion-item>
-    <ion-item v-if="address">
+    <ion-item v-if="address" @click="resetAddress">
         <ion-label position="floating">Address</ion-label>
         <ion-input type="text" v-model="formattedAddress" readOnly />
     </ion-item>
@@ -27,6 +27,7 @@ import {
 
 export default {
     name: 'SelectAddress',
+    emits: ["address-selected"],
     components: {
         IonItem, IonLabel, IonInput,
         IonCard, IonCardContent
@@ -43,6 +44,13 @@ export default {
         clickAddress(result) {
             this.address = result;
             this.results = null;
+            this.$emit("address-selected", result);
+        },
+        resetAddress() {
+            this.query = "";
+            this.address = null;
+            this.results = null;
+            this.$emit("address-selected", null);
         }
     },
     watch: {
