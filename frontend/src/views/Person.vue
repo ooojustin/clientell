@@ -74,6 +74,8 @@ export default {
 
             const { id } = this.$route.params;
             const { token } = this.$store.state;
+            if (!id) // prevent bad request from firing
+                return;
 
             // send request to load person data (includes ratings)
             const response = await Http.get({

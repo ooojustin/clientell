@@ -1,5 +1,5 @@
 <template>
-    <ion-card>
+    <ion-card :class="{ 'user-rating': isUserRating  }">
         <ion-card-content>
             <span>
                 <b>Stars:</b> {{ data.stars }}
@@ -27,9 +27,20 @@ export default {
     },
     props: {
         data: Object
+    },
+    computed: {
+        isUserRating() {
+            const { user } = this.$store.state;
+            return this.data.ownerID == user.ID;
+        }
     }
 }
 </script>
 
 <style scoped>
+.user-rating {
+    border-color: var(--ion-color-primary-shade);
+    background-color: var(--ion-color-primary);
+    color: var(--ion-color-primary-contrast);
+}
 </style>

@@ -69,8 +69,7 @@ export default {
                 }
             });
 
-            const { data, status } = response;
-            if (status == 200) {
+            if (response.status == 200) {
 
                 // show alert that a new person has been created
                 const toast = await toastController.create({
