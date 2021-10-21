@@ -106,8 +106,7 @@ export default {
                 }
             });
 
-            const { data, status } = response;
-            if (status == 200) {
+            if (response.status == 200) {
                 
                 const toast = await toastController.create({
                     message: "Your rating has been saved.",
@@ -145,8 +144,7 @@ export default {
                 }
             });
 
-            const { data, status } = response;
-            if (status == 200) {
+            if (response.status == 200) {
                 
                 const toast = await toastController.create({
                     message: "Your rating has been submitted.",
