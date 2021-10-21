@@ -10,10 +10,8 @@ import (
 )
 
 type FindPlaceData struct {
-	Input     string `url:"input"`
-	InputType string `url:"inputtype"`
-	Fields    string `url:"fields"`
-	Key       string `url:"key"`
+	Query string `url:"query"`
+	Key   string `url:"key"`
 }
 
 func SearchPlaces(c *gin.Context) {
@@ -21,15 +19,13 @@ func SearchPlaces(c *gin.Context) {
 	// query parameters to pass to google places api
 	apiKey := "AIzaSyAeN85xIwoCXFUd3ZcSLLWVf0_LNPOm6Jo"
 	params := FindPlaceData{
-		Input:     c.Query("query"),
-		InputType: "textquery",
-		Fields:    "name,formatted_address,place_id",
-		Key:       apiKey,
+		Query: c.Query("query"),
+		Key:   apiKey,
 	}
 
 	// establish url from encoded query parameters
 	qvalues, _ := query.Values(params)
-	url := "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?" + qvalues.Encode()
+	url := "https://maps.googleapis.com/maps/api/place/textsearch/json?" + qvalues.Encode()
 
 	// create client and initialize request
 	client := &http.Client{}
@@ -58,7 +54,7 @@ func SearchPlaces(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
-		"data":    jsonMap["candidates"],
+		"data":    jsonMap["results"],
 	})
 
 }

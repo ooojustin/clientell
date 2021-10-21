@@ -19,6 +19,7 @@
                 <ion-label position="floating">Last Name</ion-label>
                 <ion-input type="text" v-model="lastName" />
             </ion-item>
+            <SelectAddress />
             <ion-button expand="block" color="primary" @click="doCreate" class="mx-3 mt-3">Create</ion-button>
         </ion-content>
 
@@ -28,6 +29,8 @@
 <script>
 import { Http } from "@capacitor-community/http";
 import vars from "../variables.ts";
+
+import SelectAddress from '../components/SelectAddress.vue';
 
 import {
     toastController,
@@ -43,7 +46,7 @@ export default {
         IonPage, IonHeader, IonToolbar,
         IonTitle, IonContent, IonButtons,
         IonBackButton, IonItem, IonLabel,
-        IonInput, IonButton
+        IonInput, IonButton, SelectAddress
     },
     data() {
         return {
