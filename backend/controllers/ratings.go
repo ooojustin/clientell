@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -98,10 +99,34 @@ func (r RatingController) Delete(c *gin.Context) {
 
 func (r RatingController) Create(c *gin.Context) {
 
+	var err error
 	id := c.Param("id")
-	person, err := models.PersonFromID(id)
+	user, _ := c.Get("user")
+	userId := fmt.Sprint(user.(*models.User).ID)
 
-	// make sure we got person to rate from database
+	// check number of times this user has left a rating in the past 24 hours
+	ytd := time.Now().Add(time.Hour * -24) // time 1 day ago
+	var ratings []models.Rating
+	if err = models.DB.Table("ratings").Where("created_at > ? AND owner_id = ?", ytd, userId).Find(&ratings).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	// prevent user from creating over 5 ratings a day
+	if len(ratings) >= 5 {
+		c.JSON(http.StatusForbidden, gin.H{
+			"success": false,
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	// retrieve person to rate from database
+	var person *models.Person
+	person, err = models.PersonFromID(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
@@ -112,9 +137,8 @@ func (r RatingController) Create(c *gin.Context) {
 
 	// check if the authenticated user has already rated this person
 	// if that's the case, prevent them from creating another rating
-	user, _ := c.Get("user")
 	var userRating models.Rating
-	err = models.GetRating(id, fmt.Sprint(user.(*models.User).ID), &userRating)
+	err = models.GetRating(id, userId, &userRating)
 	if !errors.Is(err, gorm.ErrRecordNotFound) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,

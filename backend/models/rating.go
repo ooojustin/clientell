@@ -8,7 +8,7 @@ import (
 )
 
 type Rating struct {
-	ID       uint    `gorm:"primarykey"`
+	gorm.Model
 	PersonID uint    `json:"-"`
 	Person   *Person `json:"person,omitempty" gorm:"foreignKey:PersonID;references:ID"`
 	OwnerID  uint    `json:"ownerID"`
