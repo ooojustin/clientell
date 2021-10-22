@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/datatypes"
@@ -22,6 +24,7 @@ func (p PersonController) Retrieve(c *gin.Context) {
 			"success": false,
 			"error":   err.Error(),
 		})
+		return
 	}
 
 	// retrieve ratings for this person from the database
@@ -65,6 +68,7 @@ func (p PersonController) Search(c *gin.Context) {
 			"success": false,
 			"error":   err.Error(),
 		})
+		return
 	}
 
 	c.JSON(200, gin.H{
@@ -76,14 +80,40 @@ func (p PersonController) Search(c *gin.Context) {
 
 func (p PersonController) Create(c *gin.Context) {
 
-	var person models.Person
-	c.BindJSON(&person)
+	var err error
+	user, _ := c.Get("user")
+	userId := fmt.Sprint(user.(*models.User).ID)
 
-	if err := models.DB.Create(&person).Error; err != nil {
+	// check number of times this user has created a person in the past 24 hours
+	ytd := time.Now().Add(time.Hour * -24) // time 1 day ago
+	var people []models.Person
+	if err = models.DB.Table("people").Where("created_at > ? AND creator_id = ?", ytd, userId).Find(&people).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
 			"error":   err.Error(),
 		})
+		return
+	}
+
+	// prevent user from creating over 5 people a day
+	if len(people) >= 5 {
+		c.JSON(http.StatusForbidden, gin.H{
+			"success": false,
+			"error":   "You have created too many people recently.",
+		})
+		return
+	}
+
+	var person models.Person
+	c.BindJSON(&person)
+	person.Creator = user.(*models.User)
+
+	if err = models.DB.Create(&person).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   err.Error(),
+		})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{

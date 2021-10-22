@@ -1,13 +1,18 @@
 package models
 
-import "gorm.io/datatypes"
+import (
+	"gorm.io/datatypes"
+	"gorm.io/gorm"
+)
 
 type Person struct {
-	ID           uint           `gorm:"primarykey"`
+	gorm.Model
 	FirstName    string         `json:"firstName" gorm:"size:128"`
 	LastName     string         `json:"lastName" gorm:"size:128"`
 	Address      datatypes.JSON `json:"address"`
 	AverageStars float64        `json:"avgStars"`
+	CreatorID    uint           `json:"creatorID"`
+	Creator      *User          `json:"creator,omitempty" gorm:"foreignKey:CreatorID;references:ID"`
 }
 
 type PersonSearchForm struct {

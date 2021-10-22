@@ -37,6 +37,11 @@ func UpdateAverageStars(id string, db *gorm.DB) {
 	avg := float64(sum) / float64(len(ratings))
 	avg = math.Round(avg*100) / 100
 
+	// patch NaN occurrance from 0 remaining ratings
+	if math.IsNaN(avg) {
+		avg = 0
+	}
+
 	// update average stars variable for person
 	person, _ := PersonFromID(id)
 	person.AverageStars = avg

@@ -119,7 +119,7 @@ func (r RatingController) Create(c *gin.Context) {
 	if len(ratings) >= 5 {
 		c.JSON(http.StatusForbidden, gin.H{
 			"success": false,
-			"error":   err.Error(),
+			"error":   "You have created too many ratings recently.",
 		})
 		return
 	}
