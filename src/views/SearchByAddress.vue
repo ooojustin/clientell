@@ -54,7 +54,10 @@ export default {
 
             const response = await Http.post({
                 url: `${vars.backend}/person/search`,
-                headers: { Token: token },
+                headers: { 
+                    "Token": token,
+                    "content-type": "application/json"
+                },
                 data: {
                     address: this.address
                 }

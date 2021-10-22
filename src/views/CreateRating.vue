@@ -99,7 +99,10 @@ export default {
             const { token } = this.$store.state;
             const response = await Http.patch({
                 url: `${vars.backend}/person/${id}/editRating`,
-                headers: { Token: token },
+                headers: { 
+                    "Token": token,
+                    "content-type": "application/json"
+                },
                 data: {
                     stars: Number(this.stars),
                     comment: this.comment
@@ -137,7 +140,10 @@ export default {
             const { token } = this.$store.state;
             const response = await Http.post({
                 url: `${vars.backend}/person/${id}/createRating`,
-                headers: { Token: token },
+                headers: { 
+                    "Token": token,
+                    "content-type": "application/json"
+                },
                 data: {
                     stars: Number(this.stars),
                     comment: this.comment

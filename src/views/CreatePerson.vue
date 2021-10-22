@@ -61,7 +61,10 @@ export default {
             const { token } = this.$store.state;
             const response = await Http.post({
                 url: `${vars.backend}/person/create`,
-                headers: { Token: token },
+                headers: { 
+                    "Token": token,
+                    "content-type": "application/json"
+                },
                 data: {
                     firstName: this.firstName,
                     lastName: this.lastName,

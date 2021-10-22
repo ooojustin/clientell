@@ -79,6 +79,7 @@ export default {
             // send web request to create account
             const response = await Http.post({
                 url: `${vars.backend}/create_account`,
+                headers: { "content-type": "application/json" },
                 data: {
                     firstName: this.firstName,
                     lastName: this.lastName,

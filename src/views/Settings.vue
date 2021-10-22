@@ -58,7 +58,10 @@ export default {
             const { token } = this.$store.state;
             const response = await Http.patch({
                 url: `${vars.backend}/user`,
-                headers: { Token: token },
+                headers: { 
+                    "Token": token,
+                    "content-type": "application/json"
+                },
                 data: {
                     firstName: this.firstName,
                     lastName: this.lastName

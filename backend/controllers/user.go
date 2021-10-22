@@ -109,7 +109,13 @@ func (u UserController) Create(c *gin.Context) {
 
 	// bind json posted data to form for creating accounts
 	ucf := &models.UserCreateForm{}
-	c.BindJSON(&ucf)
+	if err := c.ShouldBindJSON(&ucf); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   err.Error(),
+		})
+		return
+	}
 
 	// create object in database
 	user := models.UserFromUCF(ucf)

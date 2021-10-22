@@ -54,6 +54,7 @@ export default {
             const { email, password } = this;
             const response = await Http.post({
                 url: `${vars.backend}/login`,
+                headers: { "content-type": "application/json" },
                 data: { email, password }
             }); 
 
