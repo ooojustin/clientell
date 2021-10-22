@@ -20,6 +20,11 @@
                     {{ person.address.formatted_address }}
                 </div>
             </div>
+
+            <div class="mt-6">
+                <GoogleMap :placeId="person.address.place_id" width="90%" height="150px" />
+            </div>
+
             <ion-button expand="block" color="success" class="mx-3 mt-6" v-if="canRate" @click="openCreateRating">
                 Add Rating
             </ion-button>
@@ -31,7 +36,7 @@
                     Delete Rating
                 </ion-button>
             </span>
-
+            
             <div v-if="ratings" class="mt-6">
                 <div class="ml-3 mb-2">
                     {{ ratings.length }} total ratings
@@ -51,6 +56,7 @@ import { Http } from "@capacitor-community/http";
 import vars from "../variables.ts";
 
 import Rating from "../components/Rating.vue";
+import GoogleMap from "../components/GoogleMap.vue";
 
 import {
     toastController,
@@ -62,7 +68,7 @@ import {
 export default {
     name: 'Person',
     components: {
-        Rating,
+        Rating, GoogleMap,
         IonPage, IonHeader, IonToolbar,
         IonTitle, IonContent, IonButtons,
         IonBackButton, IonButton
