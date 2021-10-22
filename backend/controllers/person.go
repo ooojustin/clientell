@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/datatypes"
 	"gorm.io/gorm"
 	"rc.justin.ooo/models"
 )
@@ -53,7 +54,7 @@ func (p PersonController) Search(c *gin.Context) {
 	var people []models.Person
 	if placeId, ok := psf.Address["place_id"]; ok {
 		// search by address - find rows which have the same place id
-		err = models.DB.Raw("SELECT * FROM people WHERE address LIKE ?", "%"+placeId.(string)+"%").Scan(&people).Error
+		err = models.DB.Table("people").Find(&people, datatypes.JSONQuery("address").Equals(placeId.(string), "place_id")).Error
 	} else {
 		// search by first and last name
 		err = models.DB.Raw("SELECT * FROM people WHERE first_name LIKE ? AND last_name LIKE ?", psf.FirstName+"%", psf.LastName+"%").Scan(&people).Error

@@ -26,7 +26,7 @@ func SetupRouter() {
 	router = gin.Default()
 	router.Use(cors.New(cors.Config{
 		AllowAllOrigins: true,
-		AllowHeaders:    []string{"Token"},
+		AllowHeaders:    []string{"Token", "content-type"},
 		AllowMethods:    []string{"GET", "POST", "PATCH", "PUT", "HEAD"},
 	}))
 
