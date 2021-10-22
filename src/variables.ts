@@ -1,7 +1,6 @@
-const isRelease = false;
+const isRelease = true;
 
 export default {
     isRelease,
-    frontend: isRelease ? "" : "http://localhost:8100",
-    backend: isRelease ? "" : "http://localhost:8080"
+    backend: isRelease ? "https://rc.justin.ooo:8000" : "http://localhost:8080"
 };
