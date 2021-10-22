@@ -72,7 +72,8 @@ export default {
                 }
             });
 
-            if (response.status == 200) {
+            const { data, status } = response;
+            if (status == 200) {
 
                 // show alert that a new person has been created
                 const toast = await toastController.create({
@@ -86,8 +87,11 @@ export default {
             } else {
 
                 // show alert that we failed to create the person
+                let message = "Failed to create a new person.";
+                if (Object.prototype.hasOwnProperty.call(data, "error"))
+                    message += "\n" + data.error;
                 const toast = await toastController.create({
-                    message: "Failed to create new person.",
+                    message,
                     duration: 3000,
                     position: "top",
                     color: "danger"

@@ -150,7 +150,8 @@ export default {
                 }
             });
 
-            if (response.status == 200) {
+            const { data, status } = response;
+            if (status == 200) {
                 
                 const toast = await toastController.create({
                     message: "Your rating has been submitted.",
@@ -162,8 +163,11 @@ export default {
                 
             } else {
 
+                let message = "An error occurred while submitting your rating.";
+                if (Object.prototype.hasOwnProperty.call(data, "error"))
+                    message += "\n" + data.error;
                 const toast = await toastController.create({
-                    message: "An error occurred while submitting your rating.",
+                    message,
                     duration: 3000,
                     position: "top",
                     color: "danger"
