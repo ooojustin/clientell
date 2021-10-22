@@ -8,36 +8,27 @@
         </ion-header>
 
         <ion-content :fullscreen="true">
-            <div class="h-full flex items-center">
-                <ion-card class="w-full" style="margin-bottom: 7.5rem;">
-                    <ion-card-header>
-                        <ion-card-title>Create an Account</ion-card-title>
-                    </ion-card-header>
-                    <ion-card-content>
-                        <ion-item class="mb-2">
-                            <ion-label position="floating">First Name</ion-label>
-                            <ion-input type="text" autocomplete="given-name" v-model="firstName" />
-                        </ion-item>
-                        <ion-item class="mb-2">
-                            <ion-label position="floating">Last Name</ion-label>
-                            <ion-input type="text" autocomplete="family-name" v-model="lastName" />
-                        </ion-item>
-                        <ion-item class="mb-2">
-                            <ion-label position="floating">Email Address</ion-label>
-                            <ion-input type="email" autocomplete="email" v-model="email" />
-                        </ion-item>
-                        <ion-item class="mb-2">
-                            <ion-label position="floating">Password</ion-label>
-                            <ion-input type="password" autocomplete="new-password" v-model="password1" />
-                        </ion-item>
-                        <ion-item class="mb-4">
-                            <ion-label position="floating">Confirm Password</ion-label>
-                            <ion-input type="password" autocomplete="new-password" v-model="password2" />
-                        </ion-item>
-                        <ion-button expand="block" color="primary" class="mb-2" @click="onSubmit">Submit</ion-button>
-                    </ion-card-content>
-                </ion-card>
-            </div>
+            <ion-item>
+                <ion-label position="floating">First Name</ion-label>
+                <ion-input type="text" autocomplete="given-name" v-model="firstName" />
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Last Name</ion-label>
+                <ion-input type="text" autocomplete="family-name" v-model="lastName" />
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Email Address</ion-label>
+                <ion-input type="email" autocomplete="email" v-model="email" />
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Password</ion-label>
+                <ion-input type="password" autocomplete="new-password" v-model="password1" />
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Confirm Password</ion-label>
+                <ion-input type="password" autocomplete="new-password" v-model="password2" />
+            </ion-item>
+            <ion-button expand="block" color="primary" class="mx-3 mt-3" @click="onSubmit">Submit</ion-button>
         </ion-content>
 
     </ion-page>
@@ -50,20 +41,16 @@ import vars from "../variables.ts";
 import {
     toastController,
     IonPage, IonHeader, IonToolbar,
-    IonTitle, IonContent, IonCard,
-    IonCardHeader, IonCardTitle, IonCardContent,
-    IonItem, IonLabel, IonInput,
-    IonButton
+    IonTitle, IonContent, IonButton,
+    IonItem, IonLabel, IonInput
 } from '@ionic/vue';
 
 export default {
     name: 'CreateAccount',
     components: {
         IonPage, IonHeader, IonToolbar,
-        IonTitle, IonContent, IonCard,
-        IonCardHeader, IonCardTitle, IonCardContent,
-        IonItem, IonLabel, IonInput,
-        IonButton
+        IonTitle, IonContent, IonButton,
+        IonItem, IonLabel, IonInput
     },
     data() {
         return {

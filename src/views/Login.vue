@@ -8,24 +8,15 @@
         </ion-header>
         
         <ion-content :fullscreen="true">
-            <div class="h-full flex items-center">
-                <ion-card class="w-full" style="margin-bottom: 10rem;">
-                    <ion-card-header>
-                        <ion-card-title>Login</ion-card-title>
-                    </ion-card-header>
-                    <ion-card-content>
-                        <ion-item class="mb-2">
-                            <ion-label position="floating">Email Address</ion-label>
-                            <ion-input type="email" autocomplete="email" v-model="email" />
-                        </ion-item>
-                        <ion-item class="mb-4">
-                            <ion-label position="floating">Password</ion-label>
-                            <ion-input type="password" autocomplete="current-password" v-model="password" />
-                        </ion-item>
-                        <ion-button expand="block" color="primary" class="mb-2" @click="doLogin">Submit</ion-button>
-                    </ion-card-content>
-                </ion-card>
-            </div>
+            <ion-item>
+                <ion-label position="floating">Email Address</ion-label>
+                <ion-input type="email" autocomplete="email" v-model="email" />
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Password</ion-label>
+                <ion-input type="password" autocomplete="current-password" v-model="password" />
+            </ion-item>
+            <ion-button expand="block" color="primary" class="mx-3 mt-3" @click="doLogin">Submit</ion-button>
         </ion-content>
 
     </ion-page>
@@ -39,9 +30,7 @@ import {
     toastController,
     IonPage, IonHeader, IonToolbar,
     IonTitle, IonContent, IonInput,
-    IonLabel, IonItem, IonCard,
-    IonCardHeader, IonCardContent, IonCardTitle,
-    IonButton 
+    IonLabel, IonItem, IonButton 
 } from '@ionic/vue';
 
 
@@ -50,9 +39,7 @@ export default {
     components: { 
         IonPage, IonHeader, IonToolbar,
         IonTitle, IonContent, IonInput,
-        IonLabel, IonItem, IonCard,
-        IonCardHeader, IonCardContent, IonCardTitle,
-        IonButton
+        IonLabel, IonItem, IonButton 
     },
     data() {
         return {
