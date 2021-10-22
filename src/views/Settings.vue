@@ -105,8 +105,7 @@ export default {
             });
 
             // show alert if token was reset in backend
-            const { data, status } = response;
-            if (status == 200) {
+            if (response.status == 200) {
                 const toast = await toastController.create({
                     message: "Logged out successfully.",
                     duration: 3000,
