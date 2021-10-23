@@ -84,6 +84,9 @@ export default {
                 });
                 toast.present();
 
+                // open the person after creating them, to leave a rating
+                this.$router.push(`/person/${data.data.ID}`);
+
             } else {
 
                 // show alert that we failed to create the person
@@ -98,10 +101,10 @@ export default {
                 });
                 toast.present();
 
+                // go back to previous route
+                this.$router.go(-1);
+
             }
-    
-            // go back to previous route
-            this.$router.go(-1);
 
         },
         setAddress(address) {
