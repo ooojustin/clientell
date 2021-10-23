@@ -3,7 +3,7 @@
 
         <ion-header>
             <ion-toolbar>
-                <ion-title>rateclients</ion-title>
+                <ion-title>Clientell</ion-title>
             </ion-toolbar>
         </ion-header>
 

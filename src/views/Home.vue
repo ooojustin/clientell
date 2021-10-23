@@ -10,8 +10,8 @@
         <ion-content :fullscreen="true">
             <ion-card>
                 <ion-card-header>
-                    <ion-card-title>rateclients</ion-card-title>
-                    <ion-card-subtitle>coming soon...</ion-card-subtitle>
+                    <ion-card-title>Clientell</ion-card-title>
+                    <ion-card-subtitle>Coming soon...</ion-card-subtitle>
                 </ion-card-header>
             </ion-card>
         </ion-content>
