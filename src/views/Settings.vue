@@ -20,10 +20,6 @@
                 <ion-label position="floating">Last Name</ion-label>
                 <ion-input type="text" autocomplete="family-name" v-model="lastName" />
             </ion-item>
-            <ion-item>
-                <ion-label>Dark Mode</ion-label>
-                <ion-toggle slot="end" @ionChange="darkModeChange" :checked="darkMode"></ion-toggle>
-            </ion-item>
             <ion-button expand="block" color="primary" @click="doSave" class="mx-3 mt-3">Save</ion-button>
             <ion-button expand="block" color="danger" @click="doLogout" class="mx-3 mt-3">Logout</ion-button>
         </ion-content>
@@ -39,8 +35,7 @@ import {
     toastController,
     IonPage, IonHeader, IonToolbar,
     IonTitle, IonContent, IonButton,
-    IonItem, IonLabel, IonInput,
-    IonToggle
+    IonItem, IonLabel, IonInput
 } from '@ionic/vue';
 
 export default {
@@ -48,27 +43,16 @@ export default {
     components: {
         IonPage, IonHeader, IonToolbar,
         IonTitle, IonContent, IonButton,
-        IonItem, IonLabel, IonInput,
-        IonToggle
+        IonItem, IonLabel, IonInput
     },
     data() {
         return {
-            darkMode: false,
             email: this.$store.state.user.email,
             firstName: this.$store.state.user.firstName,
             lastName: this.$store.state.user.lastName
         };
     },
-    created() {
-        const theme = document.body.getAttribute("color-theme");
-        this.darkMode = theme == "dark";
-    },
     methods: {
-        darkModeChange(e) {
-            const colorTheme = e.detail.checked ? "dark" : "light";
-            document.body.setAttribute("color-theme", colorTheme);
-            localStorage.setItem("theme", colorTheme);
-        },
         async doSave() {
 
             const { token } = this.$store.state;

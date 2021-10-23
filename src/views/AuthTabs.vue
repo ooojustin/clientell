@@ -38,14 +38,8 @@ export default {
         }
     },
     mounted() {
-
         // try to login from token in localStorage
         this.$store.dispatch("restoreLogin");
-
-        // restore theme from localStorage (dark by default)
-        const colorTheme = localStorage.getItem("theme") || "dark";
-        document.body.setAttribute("color-theme", colorTheme);
-
     },
     setup() {
         return { logInSharp, personAddSharp };
