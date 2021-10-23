@@ -1,4 +1,4 @@
-module rc.justin.ooo
+module clientellapp.com
 
 go 1.17
 

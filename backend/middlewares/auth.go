@@ -3,8 +3,8 @@ package middlewares
 import (
 	"net/http"
 
+	"clientellapp.com/models"
 	"github.com/gin-gonic/gin"
-	"rc.justin.ooo/models"
 )
 
 func AuthMiddleware() gin.HandlerFunc {

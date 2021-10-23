@@ -3,11 +3,11 @@ package main
 import (
 	"net/http"
 
+	"clientellapp.com/controllers"
+	"clientellapp.com/middlewares"
+	"clientellapp.com/models"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"rc.justin.ooo/controllers"
-	"rc.justin.ooo/middlewares"
-	"rc.justin.ooo/models"
 )
 
 var router *gin.Engine
@@ -41,7 +41,7 @@ func UnauthorizedRoutes() {
 	// initialize requests that don't require a token
 
 	router.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "rc.justin.ooo")
+		c.String(http.StatusOK, "clientell!")
 	})
 
 	user := new(controllers.UserController)

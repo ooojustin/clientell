@@ -3,10 +3,10 @@ package controllers
 import (
 	"net/http"
 
+	"clientellapp.com/models"
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
-	"rc.justin.ooo/models"
 )
 
 type UserController struct{}

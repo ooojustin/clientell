@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
+	"clientellapp.com/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"rc.justin.ooo/models"
 )
 
 type RatingController struct{}

@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"time"
 
+	"clientellapp.com/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
-	"rc.justin.ooo/models"
 )
 
 type PersonController struct{}
