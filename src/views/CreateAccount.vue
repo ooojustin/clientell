@@ -8,6 +8,11 @@
         </ion-header>
 
         <ion-content :fullscreen="true">
+
+            <div class="flex justify-center pt-14 pb-16">
+                <img :src="wordmark" class="w-56" />
+            </div>
+
             <ion-item>
                 <ion-label position="floating">First Name</ion-label>
                 <ion-input type="text" autocomplete="given-name" v-model="firstName" />
@@ -29,6 +34,7 @@
                 <ion-input type="password" autocomplete="new-password" v-model="password2" />
             </ion-item>
             <ion-button expand="block" color="primary" class="mx-3 mt-3" @click="onSubmit">Submit</ion-button>
+
         </ion-content>
 
     </ion-page>
@@ -60,6 +66,11 @@ export default {
             password1: "",
             password2: ""
         };
+    },
+    computed: {
+        wordmark() {
+            return require("../assets/img/wordmark.png");
+        }
     },
     methods: {
         async onSubmit() {

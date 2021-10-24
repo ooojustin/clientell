@@ -14,7 +14,7 @@ type Rating struct {
 	OwnerID  uint    `json:"ownerID"`
 	Owner    *User   `json:"owner,omitempty" gorm:"foreignKey:OwnerID;references:ID"`
 	Stars    int     `json:"stars"`
-	Comment  string  `json:"comment" gorm:"size:1000"`
+	Comment  string  `json:"comment" gorm:"size:256"`
 }
 
 func GetRating(personID string, ownerID string, rating *Rating) error {
