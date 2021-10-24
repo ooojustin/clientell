@@ -1,5 +1,5 @@
 {
-	"appId": "io.ionic.starter",
+	"appId": "com.clientellapp.app",
 	"appName": "Clientell",
 	"webDir": "dist",
 	"bundledWebRuntime": false
