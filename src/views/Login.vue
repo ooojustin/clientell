@@ -9,7 +9,7 @@
         
         <ion-content :fullscreen="true">
             
-            <div class="flex justify-center pt-14 pb-16">
+            <div class="flex justify-center pt-10 pb-12">
                 <img :src="wordmark" class="w-56" />
             </div>
 
