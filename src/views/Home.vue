@@ -9,9 +9,16 @@
 
         <ion-content :fullscreen="true">
             <ion-card>
-                <ion-card-header>
-                    <ion-card-title>Clientell</ion-card-title>
-                    <ion-card-subtitle>Coming soon...</ion-card-subtitle>
+                <ion-card-header class="text-center">
+
+                    <div class="flex justify-center pt-6 pb-8">
+                        <img :src="wordmark" class="w-56" />
+                    </div>
+
+                    <ion-card-subtitle class="font-semibold mb-3">
+                        Coming Soon
+                    </ion-card-subtitle>
+
                 </ion-card-header>
             </ion-card>
         </ion-content>
@@ -23,7 +30,7 @@
 import {
     IonPage, IonHeader, IonToolbar,
     IonTitle, IonContent, IonCard,
-    IonCardHeader, IonCardTitle, IonCardSubtitle
+    IonCardHeader, IonCardSubtitle
 } from '@ionic/vue';
 
 export default {
@@ -31,7 +38,12 @@ export default {
     components: {
         IonPage, IonHeader, IonToolbar,
         IonTitle, IonContent, IonCard,
-        IonCardHeader, IonCardTitle, IonCardSubtitle
+        IonCardHeader, IonCardSubtitle
+    },
+    computed: {
+        wordmark() {
+            return require("../assets/img/wordmark.png");
+        }
     }
 }
 </script>
