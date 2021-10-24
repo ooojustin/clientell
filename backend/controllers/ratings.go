@@ -31,6 +31,7 @@ func (r RatingController) Update(c *gin.Context) {
 	}
 
 	// copy rating variables to db record instance and save
+	userRating.Tags = rating.Tags
 	userRating.Comment = rating.Comment
 	userRating.Stars = rating.Stars
 	models.DB.Save(&userRating)

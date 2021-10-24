@@ -25,6 +25,19 @@
                 <ion-label position="floating">Comment</ion-label>
                 <ion-textarea v-model="comment"></ion-textarea>
             </ion-item>
+            <ion-item v-if="false">
+                <ion-label position="stacked">Tags</ion-label>
+                <div class="tag-container">
+                    <ion-item v-for="(tag, idx) in allTags" :key="idx">
+                        <ion-label>{{ tag }}</ion-label>
+                        <ion-checkbox 
+                            slot="start" 
+                            @update:modelValue="updateTag(tag, $event)"
+                            :modelValue="isTagChecked(tag)">
+                        </ion-checkbox>
+                    </ion-item>
+                </div>
+            </ion-item>
             <ion-button expand="block" color="primary" @click="doCreate" class="mx-3 mt-3" v-if="!isEditing">Create</ion-button>
             <ion-button expand="block" color="primary" @click="doSave" class="mx-3 mt-3" v-if="isEditing">Save</ion-button>
         </ion-content>
@@ -42,8 +55,16 @@ import {
     IonTitle, IonContent, IonButtons,
     IonBackButton, IonTextarea, IonItem,
     IonLabel, IonSelect, IonSelectOption,
-    IonButton
+    IonButton, IonCheckbox
 } from '@ionic/vue';
+
+const tags = [
+    "polite",
+    "rude",
+    "test",
+    "example",
+    "whatever"
+];
 
 export default {
     name: 'CreateRating',
@@ -52,10 +73,12 @@ export default {
         IonTitle, IonContent, IonButtons,
         IonBackButton, IonTextarea, IonItem,
         IonLabel, IonSelect, IonSelectOption,
-        IonButton
+        IonButton, IonCheckbox
     },
     data() {
         return {
+            allTags: tags,
+            tags: [],
             comment: "",
             stars: "5"
         };
@@ -78,6 +101,7 @@ export default {
             if (status == 200) {
                 this.stars = data.data.stars.toString();
                 this.comment = data.data.comment;
+                this.tags = data.data.tags.split(",");
             } else {
 
                 const toast = await toastController.create({
@@ -105,7 +129,8 @@ export default {
                 },
                 data: {
                     stars: Number(this.stars),
-                    comment: this.comment
+                    comment: this.comment,
+                    tags: this.tags.join()
                 }
             });
 
@@ -146,7 +171,8 @@ export default {
                 },
                 data: {
                     stars: Number(this.stars),
-                    comment: this.comment
+                    comment: this.comment,
+                    tags: this.tags.join()
                 }
             });
 
@@ -178,6 +204,17 @@ export default {
             
             this.$router.go(-1);
 
+        },
+        updateTag(tag, checked) {
+            if (checked) {
+                if (!this.tags.includes(tag))
+                    this.tags = this.tags.concat(tag);
+            } else {
+                this.tags = this.tags.filter(t => t != tag);
+            }
+        },
+        isTagChecked(tag) {
+            return this.tags.includes(tag);
         }
     },
     computed: {
@@ -188,3 +225,12 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.tag-container {
+    width: 100%;
+    max-height: 210px;
+    margin-top: 1rem;
+    overflow-y: scroll;
+}
+</style>
