@@ -77,6 +77,9 @@ func AuthorizedRoutes() {
 
 func main() {
 
+	// enable release mode
+	// gin.SetMode(gin.ReleaseMode)
+
 	// setup database & router
 	SetupDatabase()
 	SetupRouter()
