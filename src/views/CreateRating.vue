@@ -25,7 +25,7 @@
                 <ion-label position="floating">Comment</ion-label>
                 <ion-textarea v-model="comment"></ion-textarea>
             </ion-item>
-            <ion-item v-if="false">
+            <ion-item>
                 <ion-label position="stacked">Tags</ion-label>
                 <div class="tag-container">
                     <ion-item v-for="(tag, idx) in allTags" :key="idx">

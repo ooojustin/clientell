@@ -10,6 +10,11 @@
                 <b>Comment:</b>
                 <br />
                 {{ data.comment }}
+                <br />
+                <br />
+                <ion-chip v-for="(tag, idx) in tags" :key="idx">
+                    <ion-label outline>{{ tag }}</ion-label>
+                </ion-chip>
             </span>
         </ion-card-content>
     </ion-card>
@@ -17,13 +22,15 @@
 
 <script>
 import {
-    IonCard, IonCardContent
+    IonCard, IonCardContent, IonLabel,
+    IonChip
 } from '@ionic/vue';
 
 export default {
     name: 'Rating',
     components: {
-        IonCard, IonCardContent
+        IonCard, IonCardContent, IonLabel,
+        IonChip
     },
     props: {
         data: Object
@@ -32,6 +39,9 @@ export default {
         isUserRating() {
             const { user } = this.$store.state;
             return this.data.ownerID == user.ID;
+        },
+        tags() {
+            return this.data.tags.split(",").filter(i => i.length > 0);
         }
     }
 }

@@ -1,6 +1,6 @@
 {
 	"appId": "com.clientellapp.app",
-	"appName": "Clientell",
+	"appName": "ClienTell",
 	"webDir": "dist",
 	"bundledWebRuntime": false
 }
