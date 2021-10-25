@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"clientellapp.com/models"
-	"clientellapp.com/utils"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -35,21 +34,13 @@ func (r RatingController) Update(c *gin.Context) {
 		return
 	}
 
-	// update rating sentiment if the comment was changed
-	if rating.Comment != userRating.Comment {
-		if sentiment, err := utils.AnalyzeSentiment(rating.Comment); err == nil {
-			rating.Sentiment = sentiment.Sentiment
-		} else {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"success": false,
-				"error":   "Failed to moderate rating content.",
-			})
-			return
-		}
-	}
-
 	// update existing rating from user json
 	models.DB.Model(&userRating).Updates(rating)
+
+	// if comment changed, re-analyze sentiment
+	if rating.Comment != userRating.Comment {
+		go userRating.UpdateSentiment()
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
@@ -169,17 +160,6 @@ func (r RatingController) Create(c *gin.Context) {
 	rating.Owner = user.(*models.User)
 	rating.Person = person
 
-	// analyze sentiment of rating using api
-	if sentiment, err := utils.AnalyzeSentiment(rating.Comment); err == nil {
-		rating.Sentiment = sentiment.Sentiment
-	} else {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"success": false,
-			"error":   "Failed to moderate rating content.",
-		})
-		return
-	}
-
 	// save rating to database and make sure there's no error
 	err = models.DB.Create(&rating).Error
 	if err != nil {
@@ -189,6 +169,9 @@ func (r RatingController) Create(c *gin.Context) {
 		})
 		return
 	}
+
+	// update sentiment of rating via api
+	go rating.UpdateSentiment()
 
 	// return serialized rating
 	c.JSON(http.StatusOK, gin.H{

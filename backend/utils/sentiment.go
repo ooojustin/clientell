@@ -3,6 +3,7 @@ package utils
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 )
@@ -72,7 +73,12 @@ func AnalyzeSentiment(text string) (*Sentiment, error) {
 		return nil, err
 	}
 
-	sentiment := &sresp.Documents[0]
-	return sentiment, nil
+	// return first document (resolved sentiment data) if provided
+	if len(sresp.Documents) > 0 {
+		sentiment := &sresp.Documents[0]
+		return sentiment, nil
+	} else {
+		return nil, errors.New("Failed to analyze sentiment of text.")
+	}
 
 }

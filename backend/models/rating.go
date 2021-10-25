@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 
+	"clientellapp.com/utils"
 	"gorm.io/gorm"
 )
 
@@ -17,6 +18,12 @@ type Rating struct {
 	Comment   string  `json:"comment" gorm:"size:256"`
 	Tags      string  `json:"tags" gorm:"size:256"` // string containing tags separated by comma
 	Sentiment string  `json:"sentiment" gorm:"size:32"`
+}
+
+func (r Rating) UpdateSentiment() {
+	if sentiment, err := utils.AnalyzeSentiment(r.Comment); err == nil {
+		DB.Table("ratings").Where("id = ?", r.ID).Update("sentiment", sentiment.Sentiment)
+	}
 }
 
 func GetRating(personID string, ownerID string, rating *Rating) error {
