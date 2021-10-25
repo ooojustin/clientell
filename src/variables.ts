@@ -1,4 +1,4 @@
-const isRelease = false;
+const isRelease = true;
 
 export default {
     isRelease,

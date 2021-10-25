@@ -25,6 +25,8 @@ import {
     IonCard, IonCardContent
 } from '@ionic/vue';
 
+import { Geolocation } from '@capacitor/geolocation';
+
 export default {
     name: 'SelectAddress',
     emits: ["address-selected"],
@@ -37,8 +39,12 @@ export default {
             query: "",
             address: null,
             results: null,
-            timeout: null
+            timeout: null,
+            coords: null
         };
+    },
+    async created() {
+        await this.getLocation();
     },
     methods: {
         clickAddress(result) {
@@ -51,6 +57,10 @@ export default {
             this.address = null;
             this.results = null;
             this.$emit("address-selected", null);
+        },
+        async getLocation() {
+            const response = await Geolocation.getCurrentPosition();        
+            this.coords = response.coords;
         }
     },
     watch: {
@@ -64,13 +74,17 @@ export default {
                 return;
             }
 
+            const params = { query: this.query };
+            if (this.coords !== null)
+                params.coords = `${this.coords.latitude},${this.coords.longitude}`;
+
             this.timeout = setTimeout(async () => {
 
                 const { token } = this.$store.state;
                 const response = await Http.get({
                     url: `${vars.backend}/places`,
                     headers: { Token: token },
-                    params: { query: this.query }
+                    params
                 });
 
                 const { data, status } = response;

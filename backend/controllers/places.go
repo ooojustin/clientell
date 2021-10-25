@@ -10,8 +10,9 @@ import (
 )
 
 type FindPlaceData struct {
-	Query string `url:"query"`
-	Key   string `url:"key"`
+	Query    string `url:"query"`
+	Key      string `url:"key"`
+	Location string `url:"location"`
 }
 
 func SearchPlaces(c *gin.Context) {
@@ -19,8 +20,9 @@ func SearchPlaces(c *gin.Context) {
 	// query parameters to pass to google places api
 	apiKey := "AIzaSyAeN85xIwoCXFUd3ZcSLLWVf0_LNPOm6Jo"
 	params := FindPlaceData{
-		Query: c.Query("query"),
-		Key:   apiKey,
+		Query:    c.Query("query"),
+		Location: c.Query("coords"),
+		Key:      apiKey,
 	}
 
 	// establish url from encoded query parameters
