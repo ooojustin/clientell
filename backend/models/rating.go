@@ -9,13 +9,14 @@ import (
 
 type Rating struct {
 	gorm.Model
-	PersonID uint    `json:"-"`
-	Person   *Person `json:"person,omitempty" gorm:"foreignKey:PersonID;references:ID"`
-	OwnerID  uint    `json:"ownerID"`
-	Owner    *User   `json:"owner,omitempty" gorm:"foreignKey:OwnerID;references:ID"`
-	Stars    int     `json:"stars"`
-	Comment  string  `json:"comment" gorm:"size:256"`
-	Tags     string  `json:"tags" gorm:"size:256"` // string containing tags separated by comma
+	PersonID  uint    `json:"-"`
+	Person    *Person `json:"person,omitempty" gorm:"foreignKey:PersonID;references:ID"`
+	OwnerID   uint    `json:"ownerID"`
+	Owner     *User   `json:"owner,omitempty" gorm:"foreignKey:OwnerID;references:ID"`
+	Stars     int     `json:"stars"`
+	Comment   string  `json:"comment" gorm:"size:256"`
+	Tags      string  `json:"tags" gorm:"size:256"` // string containing tags separated by comma
+	Sentiment string  `json:"sentiment" gorm:"size:32"`
 }
 
 func GetRating(personID string, ownerID string, rating *Rating) error {
