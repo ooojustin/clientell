@@ -41,7 +41,7 @@ func AnalyzeSentiment(text string) (*Sentiment, error) {
 	// determine data to send to server
 	sreq := SentimentRequest{
 		Documents: []SentimentDocument{
-			SentimentDocument{
+			{
 				ID:       1,
 				Language: "en",
 				Text:     text,

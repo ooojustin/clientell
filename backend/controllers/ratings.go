@@ -35,10 +35,10 @@ func (r RatingController) Update(c *gin.Context) {
 	}
 
 	// update existing rating from user json
+	// also update sentiment analysis via goroutine if needed
+	updateSentiment := rating.Comment != userRating.Comment
 	models.DB.Model(&userRating).Updates(rating)
-
-	// if comment changed, re-analyze sentiment
-	if rating.Comment != userRating.Comment {
+	if updateSentiment {
 		go userRating.UpdateSentiment()
 	}
 
@@ -170,7 +170,7 @@ func (r RatingController) Create(c *gin.Context) {
 		return
 	}
 
-	// update sentiment of rating via api
+	// run rating sentiment analysis via goroutine
 	go rating.UpdateSentiment()
 
 	// return serialized rating

@@ -10,19 +10,25 @@ import (
 
 type Rating struct {
 	gorm.Model
-	PersonID  uint    `json:"-"`
-	Person    *Person `json:"person,omitempty" gorm:"foreignKey:PersonID;references:ID"`
-	OwnerID   uint    `json:"ownerID"`
-	Owner     *User   `json:"owner,omitempty" gorm:"foreignKey:OwnerID;references:ID"`
-	Stars     int     `json:"stars"`
-	Comment   string  `json:"comment" gorm:"size:256"`
-	Tags      string  `json:"tags" gorm:"size:256"` // string containing tags separated by comma
-	Sentiment string  `json:"sentiment" gorm:"size:32"`
+	PersonID    uint    `json:"-"`
+	Person      *Person `json:"person,omitempty" gorm:"foreignKey:PersonID;references:ID"`
+	OwnerID     uint    `json:"ownerID"`
+	Owner       *User   `json:"owner,omitempty" gorm:"foreignKey:OwnerID;references:ID"`
+	Stars       int     `json:"stars"`
+	Comment     string  `json:"comment" gorm:"size:256"`
+	Tags        string  `json:"tags" gorm:"size:256"` // string containing tags separated by comma
+	Sentiment   string  `json:"sentiment" gorm:"size:32"`
+	NeedsReview bool    `json:"-"`
 }
 
+// Analyze sentiment of a rating's comment and stores it automatically.
 func (r Rating) UpdateSentiment() {
 	if sentiment, err := utils.AnalyzeSentiment(r.Comment); err == nil {
-		DB.Table("ratings").Where("id = ?", r.ID).Update("sentiment", sentiment.Sentiment)
+		data := map[string]interface{}{
+			"sentiment":    sentiment.Sentiment,
+			"needs_review": sentiment.ConfidenceScores.Negative > 0.8,
+		}
+		DB.Table("ratings").Where("id = ?", r.ID).Updates(data)
 	}
 }
 
