@@ -15,8 +15,12 @@ type RatingController struct{}
 
 func (r RatingController) Update(c *gin.Context) {
 
+	// parse user request body into rating
 	var rating models.Rating
-	c.BindJSON(&rating)
+	if err := c.ShouldBindJSON(&rating); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"success": false, "error": err.Error()})
+		return
+	}
 
 	// find the authenticated users rating for this person
 	user, _ := c.Get("user")
@@ -30,11 +34,8 @@ func (r RatingController) Update(c *gin.Context) {
 		return
 	}
 
-	// copy rating variables to db record instance and save
-	userRating.Tags = rating.Tags
-	userRating.Comment = rating.Comment
-	userRating.Stars = rating.Stars
-	models.DB.Save(&userRating)
+	// update existing rating from user json
+	models.DB.Model(&userRating).Updates(rating)
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
