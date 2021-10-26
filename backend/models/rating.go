@@ -17,6 +17,7 @@ type Rating struct {
 	Stars       int     `json:"stars"`
 	Comment     string  `json:"comment" gorm:"size:256"`
 	Tags        string  `json:"tags" gorm:"size:256"` // string containing tags separated by comma
+	JobType     string  `json:"jobType" gorm:"size:32"`
 	Sentiment   string  `json:"sentiment" gorm:"size:32"`
 	NeedsReview bool    `json:"-"`
 }

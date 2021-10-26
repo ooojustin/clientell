@@ -38,6 +38,14 @@
                     </ion-item>
                 </div>
             </ion-item>
+            <ion-item>
+                <ion-label>Job Type</ion-label>
+                <ion-select v-model="jobType">
+                    <ion-select-option v-for="(jobType, idx) in allJobTypes" :key="idx" :value="jobType">
+                        {{ jobType }}
+                    </ion-select-option>
+                </ion-selecT>
+            </ion-item>
             <ion-button expand="block" color="primary" @click="doCreate" class="mx-3 mt-3" v-if="!isEditing">Create</ion-button>
             <ion-button expand="block" color="primary" @click="doSave" class="mx-3 mt-3" v-if="isEditing">Save</ion-button>
         </ion-content>
@@ -69,6 +77,18 @@ const tags = [
     "Paid Late"
 ];
 
+const jobTypes = [
+    "Contractor",
+    "Photographer",
+    "Artist",
+    "Designer",
+    "Teacher",
+    "Life Coach",
+    "Personal Trainer",
+    "Landscaper",
+    "Other"
+];
+
 export default {
     name: 'CreateRating',
     components: {
@@ -81,7 +101,9 @@ export default {
     data() {
         return {
             allTags: tags,
+            allJobTypes: jobTypes,
             tags: [],
+            jobType: jobTypes[jobTypes.length - 1],
             comment: "",
             stars: "5"
         };
@@ -105,6 +127,7 @@ export default {
                 this.stars = data.data.stars.toString();
                 this.comment = data.data.comment;
                 this.tags = data.data.tags.split(",");
+                this.jobType = data.data.jobType;
             } else {
 
                 const toast = await toastController.create({
@@ -133,7 +156,8 @@ export default {
                 data: {
                     stars: Number(this.stars),
                     comment: this.comment,
-                    tags: this.tags.join()
+                    tags: this.tags.join(),
+                    jobType: this.jobType
                 }
             });
 
@@ -175,7 +199,8 @@ export default {
                 data: {
                     stars: Number(this.stars),
                     comment: this.comment,
-                    tags: this.tags.join()
+                    tags: this.tags.join(),
+                    jobType: this.jobType
                 }
             });
 

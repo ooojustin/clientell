@@ -2,6 +2,10 @@
     <ion-card :class="{ 'user-rating': isUserRating  }">
         <ion-card-content>
             <span>
+                <b>Job:</b> {{ data.jobType }}
+            </span>
+            <br />
+            <span>
                 <b>Stars:</b> {{ data.stars }}
             </span>
             <br />
