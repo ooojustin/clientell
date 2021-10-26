@@ -25,7 +25,7 @@
                 <ion-label position="floating">Comment</ion-label>
                 <ion-textarea v-model="comment"></ion-textarea>
             </ion-item>
-            <ion-item v-if="false">
+            <ion-item>
                 <ion-label position="stacked">Tags</ion-label>
                 <div class="tag-container">
                     <ion-item v-for="(tag, idx) in allTags" :key="idx">
@@ -59,11 +59,14 @@ import {
 } from '@ionic/vue';
 
 const tags = [
-    "polite",
-    "rude",
-    "test",
-    "example",
-    "whatever"
+    "Pays on Time",
+    "Good Tip",
+    "Laid Back",
+    "Picky",
+    "Patient",
+    "Prompt",
+    "No Payment",
+    "Paid Late"
 ];
 
 export default {

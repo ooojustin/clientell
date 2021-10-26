@@ -11,12 +11,10 @@
                 <br />
                 {{ data.comment }}
                 <br />
-                <span v-if="false">
-                    <br />
-                    <ion-chip v-for="(tag, idx) in tags" :key="idx">
-                        <ion-label outline>{{ tag }}</ion-label>
-                    </ion-chip>
-                </span>
+                <br />
+                <ion-chip v-for="(tag, idx) in tags" :key="idx">
+                    <ion-label outline>{{ tag }}</ion-label>
+                </ion-chip>
             </span>
         </ion-card-content>
     </ion-card>
