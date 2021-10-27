@@ -17,6 +17,12 @@ const routes = [
         name: 'Dashboard',
         component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
         meta: { authenticated: true }
+    },
+    {
+        path: '/moderate',
+        name: 'Moderate',
+        component: () => import(/* webpackChunkName: "moderate" */ '../views/Moderate.vue'),
+        meta: { authenticated: true }
     }
 ]
 
