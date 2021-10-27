@@ -12,6 +12,7 @@ type User struct {
 	LastName  string    `json:"lastName" gorm:"size:128"`
 	Email     string    `json:"email" gorm:"size:128,unique"`
 	Password  string    `json:"-"`
+	Staff     bool      `json:"-"`
 	Token     uuid.UUID `json:"token"`
 }
 
