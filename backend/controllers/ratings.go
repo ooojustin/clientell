@@ -13,6 +13,41 @@ import (
 
 type RatingController struct{}
 
+func (r RatingController) ReviewRating(c *gin.Context) {
+
+	user, _ := c.Get("user")
+	if !user.(*models.User).Staff {
+		c.JSON(http.StatusForbidden, gin.H{"success": false, "error": "Staff only."})
+		return
+	}
+
+	var rating models.Rating
+	if err := models.DB.Table("ratings").Where("needs_review = 1").Where("id = ?", c.Param("id")).First(&rating).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"success": false, "error": err.Error()})
+		return
+	}
+
+	action := c.Param("action")
+	if action == "approve" {
+		// rating has been approved and no longer needs to be reviewed
+		models.DB.Table("ratings").Where("id = ?", rating.ID).Update("needs_review", "0")
+	} else if action == "deny" {
+		// update rating to indicate it's been reviewed and then soft delete the record
+		models.DB.Table("ratings").Where("id = ?", rating.ID).Update("needs_review", "0")
+		models.DB.Delete(&rating)
+	} else {
+		// unhandled action
+		c.JSON(http.StatusBadRequest, gin.H{"success": false, "error": "Invalid action."})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    rating,
+	})
+
+}
+
 // Returns 5 ratings which need to be reviewed.
 func (r RatingController) ReviewList(c *gin.Context) {
 
