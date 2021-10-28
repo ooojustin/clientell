@@ -42,7 +42,7 @@ func UpdateAverageStars(id string, db *gorm.DB) {
 
 	// get all ratings for person this rating is created for
 	var ratings []Rating
-	db.Table("ratings").Where("person_id = ?", id).Find(&ratings)
+	db.Table("ratings").Where("needs_review = 0").Where("person_id = ?", id).Find(&ratings)
 
 	// find average of users ratings
 	// (this can be done with a sql query too, but for loop for now)

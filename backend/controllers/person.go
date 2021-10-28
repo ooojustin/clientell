@@ -17,7 +17,9 @@ type PersonController struct{}
 func (p PersonController) Retrieve(c *gin.Context) {
 
 	id := c.Param("id")
+	user, _ := c.Get("user")
 	person, err := models.PersonFromID(id)
+	userId := user.(*models.User).ID
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -29,12 +31,12 @@ func (p PersonController) Retrieve(c *gin.Context) {
 
 	// retrieve ratings for this person from the database
 	var ratings []models.Rating
-	err = models.DB.Table("ratings").Where("person_id = ?", id).Find(&ratings).Error
+	qstr := "SELECT * FROM ratings WHERE person_id = ? AND deleted_at IS NULL AND (needs_review = 0 OR owner_id = ?)"
+	err = models.DB.Raw(qstr, id, userId).Find(&ratings).Error
 
 	// check if authenticated user has already rated the person
-	user, _ := c.Get("user")
 	var userRating models.Rating
-	err = models.DB.Table("ratings").Where("person_id = ? AND owner_id = ?", id, user.(*models.User).ID).First(&userRating).Error
+	err = models.DB.Table("ratings").Where("person_id = ? AND owner_id = ?", id, userId).First(&userRating).Error
 	noUserRating := errors.Is(err, gorm.ErrRecordNotFound)
 
 	c.JSON(http.StatusOK, gin.H{

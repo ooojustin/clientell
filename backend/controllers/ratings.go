@@ -31,6 +31,7 @@ func (r RatingController) ReviewRating(c *gin.Context) {
 	if action == "approve" {
 		// rating has been approved and no longer needs to be reviewed
 		models.DB.Table("ratings").Where("id = ?", rating.ID).Update("needs_review", "0")
+		go models.UpdateAverageStars(fmt.Sprint(rating.PersonID), models.DB)
 	} else if action == "deny" {
 		// update rating to indicate it's been reviewed and then soft delete the record
 		models.DB.Table("ratings").Where("id = ?", rating.ID).Update("needs_review", "0")
@@ -41,10 +42,7 @@ func (r RatingController) ReviewRating(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"success": true,
-		"data":    rating,
-	})
+	c.JSON(http.StatusOK, gin.H{"success": true})
 
 }
 
@@ -231,30 +229,6 @@ func (r RatingController) Create(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"data":    rating,
-	})
-
-}
-
-func (r RatingController) List(c *gin.Context) {
-
-	// get list of ratings from database for specified person
-	id := c.Param("id")
-	var ratings []models.Rating
-	err := models.DB.Table("ratings").Where("person_id = ?", id).Find(&ratings).Error
-
-	// return the error if there was an issue querying
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"success": false,
-			"error":   err.Error(),
-		})
-		return
-	}
-
-	// return list of ratings
-	c.JSON(http.StatusOK, gin.H{
-		"success": true,
-		"data":    ratings,
 	})
 
 }
