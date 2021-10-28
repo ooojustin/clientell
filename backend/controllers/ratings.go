@@ -55,12 +55,16 @@ func (r RatingController) ReviewList(c *gin.Context) {
 		return
 	}
 
+	var count int64
+	models.DB.Table("ratings").Where("needs_review = 1").Count(&count)
+
 	var ratings []models.Rating
 	models.DB.Table("ratings").Where("needs_review = 1").Limit(5).Find(&ratings)
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"data":    ratings,
+		"count":   count,
 	})
 
 }
