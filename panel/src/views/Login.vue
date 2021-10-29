@@ -41,8 +41,10 @@ export default {
     watch: {
         isAuthenticated(val) {
             // automatically redirect user when logged in
-            if (val)
+            if (val) {
                 this.$router.push("/dashboard");
+                this.$toast.success("Logged in successfully.", { position: "top" });
+            }
         }
     },
     mounted() {

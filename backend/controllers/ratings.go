@@ -56,7 +56,7 @@ func (r RatingController) ReviewList(c *gin.Context) {
 	}
 
 	var count int64
-	models.DB.Table("ratings").Where("needs_review = 1").Count(&count)
+	models.DB.Table("ratings").Where("needs_review = 1").Where("deleted_at IS NULL").Count(&count)
 
 	var ratings []models.Rating
 	models.DB.Table("ratings").Where("needs_review = 1").Limit(5).Find(&ratings)

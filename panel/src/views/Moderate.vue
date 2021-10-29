@@ -23,7 +23,7 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="mt-3">
+            <div class="mt-3" v-if="ratings !== null">
                 As you approve and deny ratings, new ones will appear.
                 <br />
                 <b>Showing {{ ratings.length }} of {{ count }} results.</b>
@@ -62,8 +62,13 @@ export default {
         async onAction(rating, approve) {
             const action = approve ? "approve" : "deny";
             const response = await api.post(`/reviewRating/${rating.ID}/${action}`);
-            if (response.status == 200)
+            if (response.status == 200) {
+                const word = approve ? "approved" : "denied";
+                this.$toast.success(`Rating has been ${word}.`, { position: "top" });
                 this.loadRatings();
+            } else {
+                this.$toast.error(`Failed to ${action} rating.`, { position: "top" });
+            }
         }
     }
 }
