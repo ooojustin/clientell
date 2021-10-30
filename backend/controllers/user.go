@@ -73,20 +73,32 @@ func (u UserController) Login(c *gin.Context) {
 	ulf := &models.UserLoginForm{}
 	c.BindJSON(&ulf)
 
+	// retrieve user record from entered email address
 	user, err := models.UserFromEmail(ulf.Email)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"success": false})
 		return
 	}
 
+	// verify that the user entered the correct password
 	bhash := []byte(user.Password)
 	bpw := []byte(ulf.Password)
 	if bcrypt.CompareHashAndPassword(bhash, bpw) == nil {
+
+		// if this is a staff page login, prevent normal users from proceeding
+		if ulf.Staff && !user.Staff {
+			c.JSON(http.StatusForbidden, gin.H{"success": false})
+			return
+		}
+
+		// login successful, return use data
 		c.JSON(http.StatusOK, gin.H{
 			"success": true,
 			"data":    user,
 		})
+
 	} else {
+		// user entered invalid password
 		c.JSON(http.StatusBadRequest, gin.H{"success": false})
 	}
 

@@ -26,6 +26,7 @@ type UserCreateForm struct {
 type UserLoginForm struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
+	Staff    bool   `json:"staff"`
 }
 
 type UserUpdateForm struct {

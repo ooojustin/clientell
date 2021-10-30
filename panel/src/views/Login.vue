@@ -54,8 +54,21 @@ export default {
     methods: {
         async onSubmit() {
 
+            let response = null;
             const { email, password } = this;
-            const response = await axios.post(`${vars.backend}/login`, { email, password });
+            try {
+                response = await axios.post(`${vars.backend}/login`, { email, password, staff: true });
+            } catch (error) {
+                if (error.response) {
+                    const msg = error.response.status == 403 ?
+                        "You must be a staff member to access the panel." :
+                        "Failed to login with those credentials.";
+                    this.$toast.error(msg, { position: "top" });
+                } else {
+                    this.$toast.error("An unknown error has occurred.", { position: "top" });
+                }
+                return;
+            }
 
             const { data, status } = response;
             if (status == 200) {
