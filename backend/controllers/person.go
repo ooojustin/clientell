@@ -31,8 +31,8 @@ func (p PersonController) Retrieve(c *gin.Context) {
 
 	// retrieve ratings for this person from the database
 	var ratings []models.Rating
-	qstr := "SELECT * FROM ratings WHERE person_id = ? AND deleted_at IS NULL AND (needs_review = 0 OR owner_id = ?)"
-	err = models.DB.Raw(qstr, id, userId).Find(&ratings).Error
+	qstr := "SELECT * FROM ratings WHERE person_id = ? AND deleted_at IS NULL AND (needs_review = 0 OR owner_id = ?) AND (hidden = 0 OR owner_id = ?)"
+	err = models.DB.Raw(qstr, id, userId, userId).Find(&ratings).Error
 
 	// check if authenticated user has already rated the person
 	var userRating models.Rating

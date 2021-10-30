@@ -33,9 +33,12 @@ func (r RatingController) ReviewRating(c *gin.Context) {
 		models.DB.Table("ratings").Where("id = ?", rating.ID).Update("needs_review", "0")
 		go models.UpdateAverageStars(fmt.Sprint(rating.PersonID), models.DB)
 	} else if action == "deny" {
-		// update rating to indicate it's been reviewed and then soft delete the record
-		models.DB.Table("ratings").Where("id = ?", rating.ID).Update("needs_review", "0")
-		models.DB.Delete(&rating)
+		// mark rating as hidden
+		params := map[string]interface{}{
+			"needs_review": false,
+			"hidden":       true,
+		}
+		models.DB.Table("ratings").Where("id = ?", rating.ID).Updates(params)
 	} else {
 		// unhandled action
 		c.JSON(http.StatusBadRequest, gin.H{"success": false, "error": "Invalid action."})

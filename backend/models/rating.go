@@ -20,6 +20,7 @@ type Rating struct {
 	JobType     string  `json:"jobType" gorm:"size:32"`
 	Sentiment   string  `json:"sentiment" gorm:"size:32"`
 	NeedsReview bool    `json:"-"`
+	Hidden      bool    `json:"-"`
 }
 
 // Analyze sentiment of a rating's comment and stores it automatically.
