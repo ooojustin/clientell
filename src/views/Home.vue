@@ -16,24 +16,24 @@
                         <img :src="wordmark" class="w-56" />
                     </div>
 
-                    <ion-card-subtitle class="font-semibold mb-3">
-                        Coming Soon
-                    </ion-card-subtitle>
+                    <div>
+                        <ion-button expand="block" color="primary" class="mx-3 mt-3 uppercase" @click="$router.push('/tabs/search/name')">
+                            <ion-icon :icon="personSharp" class="mr-2" />
+                            Search  by Name
+                        </ion-button>
+                        <ion-button expand="block" color="primary" class="mx-3 mt-3 uppercase" @click="$router.push('/tabs/search/address')">
+                            <ion-icon :icon="home" class="mr-2" />
+                            Search by Address
+                        </ion-button>
+                        <ion-button expand="block" color="primary" class="mx-3 mt-3 uppercase" @click="$router.push('/ratings')">
+                            <ion-icon :icon="star" class="mr-2" />
+                            My Ratings
+                        </ion-button>
+                    </div>
 
                 </ion-card-header>
             </ion-card>
 
-            <div>
-                <ion-button expand="block" color="primary" class="mx-3 mt-3 uppercase" @click="$router.push('/tabs/search/name')">
-                    Search  by Name
-                </ion-button>
-                <ion-button expand="block" color="primary" class="mx-3 mt-3 uppercase" @click="$router.push('/tabs/search/address')">
-                    Search by Address
-                </ion-button>
-                <ion-button expand="block" color="primary" class="mx-3 mt-3 uppercase" @click="$router.push('/ratings')">
-                    My Reviews
-                </ion-button>
-            </div>
 
         </ion-content>
 
@@ -44,20 +44,25 @@
 import {
     IonPage, IonHeader, IonToolbar,
     IonTitle, IonContent, IonCard,
-    IonCardHeader, IonCardSubtitle, IonButton
+    IonCardHeader, IonButton, IonIcon
 } from '@ionic/vue';
+import { personSharp, home, star } from 'ionicons/icons';
 
 export default {
     name: 'Home',
     components: {
         IonPage, IonHeader, IonToolbar,
         IonTitle, IonContent, IonCard,
-        IonCardHeader, IonCardSubtitle, IonButton
+        IonCardHeader, IonButton, IonIcon
+        
     },
     computed: {
         wordmark() {
             return require("../assets/img/wordmark.png");
         }
+    },
+    setup() {
+        return { personSharp, home, star };
     }
 }
 </script>
