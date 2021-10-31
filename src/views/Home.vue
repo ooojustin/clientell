@@ -8,6 +8,7 @@
         </ion-header>
 
         <ion-content :fullscreen="true">
+
             <ion-card>
                 <ion-card-header class="text-center">
 
@@ -21,6 +22,16 @@
 
                 </ion-card-header>
             </ion-card>
+
+            <div>
+                <ion-button expand="block" color="primary" class="mx-3 mt-3 uppercase" @click="$router.push('/tabs/search/name')">
+                    Search  by Name
+                </ion-button>
+                <ion-button expand="block" color="primary" class="mx-3 mt-3 uppercase" @click="$router.push('/tabs/search/address')">
+                    Search by Address
+                </ion-button>
+            </div>
+
         </ion-content>
 
     </ion-page>
@@ -30,7 +41,7 @@
 import {
     IonPage, IonHeader, IonToolbar,
     IonTitle, IonContent, IonCard,
-    IonCardHeader, IonCardSubtitle
+    IonCardHeader, IonCardSubtitle, IonButton
 } from '@ionic/vue';
 
 export default {
@@ -38,7 +49,7 @@ export default {
     components: {
         IonPage, IonHeader, IonToolbar,
         IonTitle, IonContent, IonCard,
-        IonCardHeader, IonCardSubtitle
+        IonCardHeader, IonCardSubtitle, IonButton
     },
     computed: {
         wordmark() {
