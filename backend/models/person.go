@@ -21,6 +21,12 @@ type PersonSearchForm struct {
 	Address   map[string]interface{} `json:"address"`
 }
 
+type PersonSearchResult struct {
+	FirstName    string  `json:"firstName"`
+	LastName     string  `json:"lastName"`
+	AverageStars float64 `json:"avgStars"`
+}
+
 func PersonFrom(field string, value string) (*Person, error) {
 	var person Person
 	err := DB.Table("people").Where(field+" = ?", value).First(&person).Error

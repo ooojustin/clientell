@@ -8,10 +8,48 @@ import (
 
 	"clientellapp.com/models"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/copier"
 	"gorm.io/gorm"
 )
 
 type RatingController struct{}
+
+func (r RatingController) List(c *gin.Context) {
+
+	u, _ := c.Get("user")
+	user := u.(*models.User)
+	userId := fmt.Sprint(user.ID)
+
+	// query for ratings created by the authenticated user
+	var ratings []models.Rating
+	if err := models.DB.Table("ratings").Where("owner_id = ?", userId).Find(&ratings).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"success": false, "error": err.Error()})
+		return
+	}
+
+	// loop through ratings to modify them
+	for idx, rating := range ratings {
+
+		// query database for the person who this rating was for
+		var person models.Person
+		if err := models.DB.Table("people").Where("id = ?", fmt.Sprint(rating.PersonID)).First(&person).Error; err != nil {
+			// failted to locate person for this rating
+			continue
+		}
+
+		// copy values from person object to simplified searh result struct
+		var psr models.PersonSearchResult
+		copier.Copy(&psr, &person)
+		ratings[idx].PersonData = psr
+
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    ratings,
+	})
+
+}
 
 func (r RatingController) ReviewRating(c *gin.Context) {
 

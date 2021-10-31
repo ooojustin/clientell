@@ -73,6 +73,7 @@ func AuthorizedRoutes() {
 	router.POST("/person/:id/deleteRating", rating.Delete)
 	router.GET("/listReviewRatings", rating.ReviewList)
 	router.POST("/reviewRating/:id/:action", rating.ReviewRating)
+	router.GET("/listRatings", rating.List)
 
 }
 
