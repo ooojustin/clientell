@@ -30,6 +30,9 @@
                 <ion-button expand="block" color="primary" class="mx-3 mt-3 uppercase" @click="$router.push('/tabs/search/address')">
                     Search by Address
                 </ion-button>
+                <ion-button expand="block" color="primary" class="mx-3 mt-3 uppercase" @click="$router.push('/ratings')">
+                    My Reviews
+                </ion-button>
             </div>
 
         </ion-content>
