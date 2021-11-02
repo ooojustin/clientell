@@ -82,6 +82,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/ratings',
         component: () => import('@/views/UserRatings.vue'),
         meta: { authenticated: true }
+    },
+    {
+        path: '/faq',
+        component: () => import('@/views/FAQ.vue'),
+        meta: { authenticated: true }
     }
 ];
 

@@ -22,6 +22,10 @@
             </ion-item>
             <ion-button expand="block" color="primary" @click="doSave" class="mx-3 mt-3">Save</ion-button>
             <ion-button expand="block" color="danger" @click="doLogout" class="mx-3 mt-3">Logout</ion-button>
+            <ion-item button @click="openFAQ()" class="mt-3">
+                <ion-label>Frequently Asked Questions</ion-label>
+                <ion-icon :icon="helpCircle" slot="end"></ion-icon>
+            </ion-item>
         </ion-content>
 
     </ion-page>
@@ -35,15 +39,18 @@ import {
     toastController,
     IonPage, IonHeader, IonToolbar,
     IonTitle, IonContent, IonButton,
-    IonItem, IonLabel, IonInput
+    IonItem, IonLabel, IonInput,
+    IonIcon
 } from '@ionic/vue';
+import { helpCircle } from 'ionicons/icons';
 
 export default {
     name: 'Settings',
     components: {
         IonPage, IonHeader, IonToolbar,
         IonTitle, IonContent, IonButton,
-        IonItem, IonLabel, IonInput
+        IonItem, IonLabel, IonInput,
+        IonIcon
     },
     data() {
         return {
@@ -122,7 +129,13 @@ export default {
             this.$store.dispatch("logout");
             this.$router.push("/auth/login");
 
+        },
+        openFAQ() {
+            this.$router.push("/faq");
         }
+    },
+    setup() {
+        return { helpCircle };
     }
 }
 </script>
