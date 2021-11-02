@@ -54,6 +54,10 @@ export default {
     methods: {
         async loadData() {
 
+            // only run code when user ratings tab is current path
+            if (this.$router.currentRoute._value.path != "/ratings")
+                return;
+
             // present loading overlay
             const loading = await loadingController.create({ message: 'Loading ratings...' });
             await loading.present();

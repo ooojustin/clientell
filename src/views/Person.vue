@@ -43,7 +43,7 @@
                     <br />
                     Average Stars: {{ person.avgStars }}
                 </div>
-                <Rating v-for="rating in ratings" :data="rating" :key="rating.ID" />
+                <Rating v-for="rating in ratings" :data="rating" @update-rating="updateRating" :key="rating.ID" />
             </div>
 
         </ion-content>
@@ -165,6 +165,9 @@ export default {
         },
         openEditRating() {
             this.$router.push("/createRating/" + this.$route.params.id + "?edit=true");
+        },
+        updateRating(data) {
+            this.ratings = this.ratings.map(r => r.ID == data.ID ? data : r);
         }
     },
     watch: {
