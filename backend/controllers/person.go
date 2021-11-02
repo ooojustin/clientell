@@ -39,6 +39,9 @@ func (p PersonController) Retrieve(c *gin.Context) {
 	err = models.DB.Table("ratings").Where("person_id = ? AND owner_id = ?", id, userId).First(&userRating).Error
 	noUserRating := errors.Is(err, gorm.ErrRecordNotFound)
 
+	// set user reaction of each rating
+	ratings = models.SetUserReactions(ratings, fmt.Sprint(userId))
+
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"data": gin.H{

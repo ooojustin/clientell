@@ -33,14 +33,14 @@ func (r RatingController) List(c *gin.Context) {
 		// query database for the person who this rating was for
 		var person models.Person
 		if err := models.DB.Table("people").Where("id = ?", fmt.Sprint(rating.PersonID)).First(&person).Error; err != nil {
-			// failted to locate person for this rating
+			// failed to locate person for this rating
 			continue
 		}
 
 		// copy values from person object to simplified searh result struct
 		var psr models.PersonSearchResult
 		copier.Copy(&psr, &person)
-		ratings[idx].PersonData = psr
+		ratings[idx].PersonData = &psr
 
 	}
 

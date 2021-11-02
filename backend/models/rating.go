@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"math"
 
@@ -10,18 +11,38 @@ import (
 
 type Rating struct {
 	gorm.Model
-	PersonID    uint               `json:"-"`
-	Person      *Person            `json:"person,omitempty" gorm:"foreignKey:PersonID;references:ID"`
-	PersonData  PersonSearchResult `json:"personData,omitempty" gorm:"-"`
-	OwnerID     uint               `json:"ownerID"`
-	Owner       *User              `json:"owner,omitempty" gorm:"foreignKey:OwnerID;references:ID"`
-	Stars       int                `json:"stars"`
-	Comment     string             `json:"comment" gorm:"size:256"`
-	Tags        string             `json:"tags" gorm:"size:256"` // string containing tags separated by comma
-	JobType     string             `json:"jobType" gorm:"size:32"`
-	Sentiment   string             `json:"sentiment" gorm:"size:32"`
-	NeedsReview bool               `json:"-"`
-	Hidden      bool               `json:"-"`
+	PersonID    uint                `json:"-"`
+	Person      *Person             `json:"person,omitempty" gorm:"foreignKey:PersonID;references:ID"`
+	PersonData  *PersonSearchResult `json:"personData,omitempty" gorm:"-"`
+	OwnerID     uint                `json:"ownerID"`
+	Owner       *User               `json:"owner,omitempty" gorm:"foreignKey:OwnerID;references:ID"`
+	Stars       int                 `json:"stars"`
+	Comment     string              `json:"comment" gorm:"size:256"`
+	Tags        string              `json:"tags" gorm:"size:256"` // string containing tags separated by comma
+	JobType     string              `json:"jobType" gorm:"size:32"`
+	Sentiment   string              `json:"sentiment" gorm:"size:32"`
+	NeedsReview bool                `json:"-"`
+	Hidden      bool                `json:"-"`
+	Reaction    string              `json:"reaction,omitempty" gorm:"-"`
+
+	// reaction counts (stored here for querying & simplicity purposes)
+	// individual reactions are stored in a separate table too
+	RThumbsUp   int `json:"thumbs_up"`
+	RThumbsDown int `json:"thumbs_down"`
+	RFunny      int `json:"funny"`
+	RFire       int `json:"fire"`
+	RHeart      int `json:"heart"`
+}
+
+func SetUserReactions(ratings []Rating, userId string) []Rating {
+	for idx, rating := range ratings {
+		var userReaction Reaction
+		err := DB.Table("reactions").Where("rating_id = ? AND owner_id = ?", rating.ID, userId).First(&userReaction).Error
+		if err == nil {
+			ratings[idx].Reaction = userReaction.Type
+		}
+	}
+	return ratings
 }
 
 // Analyze sentiment of a rating's comment and stores it automatically.
@@ -68,12 +89,18 @@ func UpdateAverageStars(id string, db *gorm.DB) {
 }
 
 func (r *Rating) AfterCreate(tx *gorm.DB) (err error) {
+	if r.Person == nil {
+		return errors.New("No rated user data.")
+	}
 	personID := fmt.Sprint(r.Person.ID)
 	UpdateAverageStars(personID, tx)
 	return nil
 }
 
 func (r *Rating) AfterUpdate(tx *gorm.DB) (err error) {
+	if r.Person == nil {
+		return errors.New("No rated user data.")
+	}
 	personID := fmt.Sprint(r.PersonID)
 	UpdateAverageStars(personID, tx)
 	return nil
