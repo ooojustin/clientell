@@ -18,6 +18,7 @@ func SetupDatabase() {
 	models.DB.AutoMigrate(&models.User{})
 	models.DB.AutoMigrate(&models.Person{})
 	models.DB.AutoMigrate(&models.Rating{})
+	models.DB.AutoMigrate(&models.Reaction{})
 }
 
 func SetupRouter() {
@@ -74,6 +75,9 @@ func AuthorizedRoutes() {
 	router.GET("/listReviewRatings", rating.ReviewList)
 	router.POST("/reviewRating/:id/:action", rating.ReviewRating)
 	router.GET("/listRatings", rating.List)
+
+	reaction := new(controllers.ReactionController)
+	router.POST("/rating/:id/react", reaction.Create)
 
 }
 
