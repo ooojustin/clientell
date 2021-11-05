@@ -101,7 +101,10 @@ export default {
             const { token } = this.$store.state;
             const response = await Http.post({
                 url: `${vars.backend}/rating/${this.data.ID}/react`,
-                headers: { Token: token },
+                headers: { 
+                    "Token": token,
+                    "content-type": "application/json"
+                },
                 data: { type: reaction }
             });
 
