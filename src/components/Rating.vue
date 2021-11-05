@@ -21,6 +21,7 @@
                 </ion-chip>
             </span>
             <br />
+
             <span>
                 <ion-chip v-if="data.thumbs_up > 0" :color="data.reaction == 'thumbs_up' ? 'primary' : 'medium'" @click="clickReaction('thumbs_up')">
                     <ion-label>&#128077;&nbsp;{{ data.thumbs_up }}</ion-label>
@@ -112,17 +113,19 @@ export default {
             const { status, data } = response;
             if (status == 200) {
 
-                // notify user that reaction was left
-                const toast = await toastController.create({
-                    message: "You have left a reaction.",
-                    duration: 3000,
-                    position: "top",
-                    color: "success"
-                });
-                toast.present();
-
                 // tell parant component to update rating in the list
                 this.$emit("update-rating", data.data.rating);
+
+            } else {
+
+                // notify user of the failure
+                const toast = await toastController.create({
+                    message: "Failed to leave a reaction.",
+                    duration: 3000,
+                    position: "top",
+                    color: "danger"
+                });
+                toast.present();
 
             }
 
@@ -144,17 +147,19 @@ export default {
             const { status, data } = response;
             if (status == 200) {
 
-                // notify user that their reaction was removed
-                const toast = await toastController.create({
-                    message: "Your reaction has been removed.",
-                    duration: 3000,
-                    position: "top",
-                    color: "success"
-                });
-                toast.present();
-
                 // tell parant component to update rating in the list
                 this.$emit("update-rating", data.data);
+
+            } else {
+
+                // notify user of the failure
+                const toast = await toastController.create({
+                    message: "Failed to remove your reaction.",
+                    duration: 3000,
+                    position: "top",
+                    color: "danger"
+                });
+                toast.present();
 
             }
 
