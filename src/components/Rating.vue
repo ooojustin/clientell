@@ -22,19 +22,19 @@
             </span>
             <br />
             <span>
-                <ion-chip v-if="data.thumbs_up > 0" :color="data.reaction == 'thumbs_up' ? 'primary' : 'medium'">
+                <ion-chip v-if="data.thumbs_up > 0" :color="data.reaction == 'thumbs_up' ? 'primary' : 'medium'" @click="clickReaction('thumbs_up')">
                     <ion-label>&#128077;&nbsp;{{ data.thumbs_up }}</ion-label>
                 </ion-chip>
-                <ion-chip v-if="data.thumbs_down > 0" :color="data.reaction == 'thumbs_down' ? 'primary' : 'medium'">
+                <ion-chip v-if="data.thumbs_down > 0" :color="data.reaction == 'thumbs_down' ? 'primary' : 'medium'" @click="clickReaction('thumbs_down')">
                     <ion-label>&#128078;&nbsp;{{ data.thumbs_down }}</ion-label>
                 </ion-chip>
-                <ion-chip v-if="data.funny > 0" :color="data.reaction == 'funny' ? 'primary' : 'medium'">
+                <ion-chip v-if="data.funny > 0" :color="data.reaction == 'funny' ? 'primary' : 'medium'" @click="clickReaction('funny')">
                     <ion-label>&#128514;&nbsp;{{ data.funny }}</ion-label>
                 </ion-chip>
-                <ion-chip v-if="data.fire > 0" :color="data.reaction == 'fire' ? 'primary' : 'medium'">
+                <ion-chip v-if="data.fire > 0" :color="data.reaction == 'fire' ? 'primary' : 'medium'" @click="clickReaction('fire')">
                     <ion-label>&#128293;&nbsp;{{ data.fire }}</ion-label>
                 </ion-chip>
-                <ion-chip v-if="data.heart > 0" :color="data.reaction == 'heart' ? 'primary' : 'medium'">
+                <ion-chip v-if="data.heart > 0" :color="data.reaction == 'heart' ? 'primary' : 'medium'" @click="clickReaction('heart')">
                     <ion-label>&#10084;&nbsp;{{ data.heart }}</ion-label>
                 </ion-chip>
             </span>
@@ -114,7 +114,7 @@ export default {
 
                 // notify user that reaction was left
                 const toast = await toastController.create({
-                    message: "Your reaction has been recorded.",
+                    message: "You have left a reaction.",
                     duration: 3000,
                     position: "top",
                     color: "success"
@@ -123,6 +123,38 @@ export default {
 
                 // tell parant component to update rating in the list
                 this.$emit("update-rating", data.data.rating);
+
+            }
+
+        },
+        async clickReaction(reaction) {
+
+            // make sure they clicked the reaction they've reacted with
+            if (this.data.reaction !== reaction)
+                return;
+            
+            // send web request to delete reaction
+            const { token } = this.$store.state;
+            const response = await Http.get({
+                url: `${vars.backend}/rating/${this.data.ID}/unreact`,
+                headers: { Token: token }
+            });
+
+            // handle success
+            const { status, data } = response;
+            if (status == 200) {
+
+                // notify user that their reaction was removed
+                const toast = await toastController.create({
+                    message: "Your reaction has been removed.",
+                    duration: 3000,
+                    position: "top",
+                    color: "success"
+                });
+                toast.present();
+
+                // tell parant component to update rating in the list
+                this.$emit("update-rating", data.data);
 
             }
 

@@ -78,6 +78,7 @@ func AuthorizedRoutes() {
 
 	reaction := new(controllers.ReactionController)
 	router.POST("/rating/:id/react", reaction.Create)
+	router.GET("/rating/:id/unreact", reaction.Delete)
 
 }
 
