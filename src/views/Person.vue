@@ -38,12 +38,22 @@
             </span>
             
             <div v-if="ratings" class="mt-6">
-                <div class="ml-3 mb-2">
-                    {{ ratings.length }} total ratings
-                    <br />
-                    Average Stars: {{ person.avgStars }}
+                <!--<div class="ml-3 mb-2">-->
+                    <!--{{ ratings.length }} total ratings-->
+                    <!--<br />-->
+                    <!--Average Stars: {{ person.avgStars }}-->
+                <!--</div>-->
+                <div class="text-center mb-5">
+                    <div class="text-lg">{{ ratings.length }} total ratings</div>
+                    <div class="text-lg">Average Stars: {{ person.avgStars }}</div>
+                    <div class="text-4xl">{{ avgStars }} ({{ person.avgStars }})</div>
                 </div>
-                <Rating v-for="rating in ratings" :data="rating" @update-rating="updateRating" :key="rating.ID" />
+                <Rating 
+                    v-for="rating in ratings" 
+                    @update-rating="updateRating" 
+                    :data="rating" 
+                    :key="rating.ID" 
+                />
             </div>
 
         </ion-content>
@@ -168,6 +178,29 @@ export default {
         },
         updateRating(data) {
             this.ratings = this.ratings.map(r => r.ID == data.ID ? data : r);
+        }
+    },
+    computed: {
+        avgStars() {
+
+            // use basic math to round to nearest 0.5 and separate the whole # and remainder
+            const avg = Math.round(this.person.avgStars * 2) / 2;
+            const rem = avg % 1;
+            const whole = avg - rem;
+            
+            // generate string of html entities for star characters
+            let str = "";
+            for (let i = 0; i < whole; i++)
+                str += "&#9733;";
+            if (rem > 0)
+                str += "&#11242;"
+
+            // decode html entities and return
+            const txt = document.createElement("textarea");
+            txt.innerHTML = str;
+            str = txt.value;
+            return str;
+
         }
     },
     watch: {
